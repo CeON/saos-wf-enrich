@@ -95,15 +95,17 @@
 (defn save-data [ fname data ]
    (spit fname (cc/generate-string data)))
 
-(def N 200)
-
-(defn save-buffer-overhead-one-source [ source buffer ]
-  (if (< (count (get-in buffer [ source :data ])) N)
+(defn save-buffer-dump-one-source [ n source buffer ]
+  (if (<= (count (get-in buffer [ source :data ])) n)
     buffer
     (let [
+          [ dropper-f taker-f]
+            (if (= n 0)
+              [ (fn [seq] []) identity ]
+              [  #(drop n %) #(take n %) ])
           buffer*
              (-> buffer
-                (update-in [ source :data ] #(drop N %))
+                (update-in [ source :data ] dropper-f)
                 (update-in [ source :num-dumps ] inc))
           fname
              (format
@@ -112,10 +114,10 @@
           _
             (save-data
                fname
-               (take N
+               (taker-f
                  (get-in buffer [ source :data ])))
           ]
-      (recur source buffer*))))
+      (recur n source buffer*))))
 
 (defn save-buffer-overhead [ buffer ]
   (let [
@@ -123,27 +125,10 @@
           (apply comp
             (map
               #(fn [b]
-                 (save-buffer-overhead-one-source % b))
+                 (save-buffer-dump-one-source 200 % b))
               (keys buffer)))
        ]
     (save-all-sources-fn buffer)))
-
-(defn save-buffer-rest-one-source [ source buffer ]
-  (let [
-         buffer*
-           (-> buffer
-              (assoc-in [ source :data ] [])
-              (update-in [ source :num-dumps ] inc))
-          fname
-             (format
-               (get-in buffer [ source :out-fname-format ])
-               (get-in buffer* [ source :num-dumps ]))
-          _
-            (save-data
-               fname
-               (get-in buffer [ source :data ]))
-          ]
-      buffer*))
 
 (defn save-buffer-rest [buffer]
     (let [
@@ -151,7 +136,7 @@
           (apply comp
             (map
               #(fn [b]
-                 (save-buffer-rest-one-source % b))
+                 (save-buffer-dump-one-source 0 % b))
               (keys buffer)))
        ]
     (save-all-sources-fn buffer)))
@@ -174,4 +159,5 @@
   (last
    (take-while
      is-there-more?
-     (iterate handle-buffer [ empty-buffer url nil ]))))
+     (iterate handle-buffer [ empty-buffer url nil ])))
+  nil)
