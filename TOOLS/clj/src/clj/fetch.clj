@@ -93,7 +93,7 @@
   (update-all-sources-fn buffer)))
 
 (defn save-data [ fname data ]
-   (spit fname (cc/generate-string data)))
+  (spit fname (cc/generate-string data)))
 
 (defn save-buffer-dump-one-source [ n source buffer ]
   (if (<= (count (get-in buffer [ source :data ])) n)
@@ -154,6 +154,50 @@
                    (update-buffer buffer items))))
         ]
   [ buffer* url-next error]))
+
+
+(defn fetch-courts-all [ url ]
+  (fetch-items-all
+    "https://saos-test.icm.edu.pl/api/dump/"))
+
+;; Generate map division-id->court
+
+(defn conv-divisions-to-map [ divisions ]
+  (let [
+         divisions-keys (map :id divisions)
+         divisions-vals (map #(dissoc % :id) divisions)
+        ]
+    (zipmap divisions-keys divisions-vals)))
+
+(defn has-division-data? [ division-id court ]
+  (if (contains? (:divisions court) division-id)
+    (assoc-in court [:divisions ]
+         (assoc ((:divisions court)  division-id) :id division-id))
+    nil))
+
+(defn get-court-data [ division-id courts ]
+  (->> courts
+       (map #(update-in % [:divisions] conv-divisions-to-map))
+       (some #(has-division-data? division-id %))))
+
+;; Generate map division-id->court
+
+(defn gen-division-id->court-items [court]
+  (let [
+         empty-court
+           (dissoc court :divisions)
+         divisions
+           (:divisions court)
+         create-court-item-fn
+           #(vector (:id %) (assoc empty-court :division %))
+       ]
+    (map create-court-item-fn divisions)))
+
+
+(defn gen-division-id->court-map [ courts ]
+  (into
+    {}
+    (mapcat gen-division-id->court-items courts)))
 
 (defn fetch-buffer-all [url]
   (last
