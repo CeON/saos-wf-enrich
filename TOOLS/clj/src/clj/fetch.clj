@@ -2,9 +2,6 @@
   (require [cheshire.core :as cc]
            [clj-http.client :as hc]))
 
-(def SAOS-TEST-BASE-API
-  "https://saos-test.icm.edu.pl/api/dump/")
-
 (defn ^:private get-url-next [ links ]
   (let [
           is-rel-next-fn?
@@ -63,12 +60,12 @@
   { "COMMON_COURT" { :data []
                      :num-dumps 0
                      :out-fname-format
-                        "out/commo_court_%04d.json.gz"
+                        "out/commo_court_%04d.json"
                    }
     "SUPREME_COURT" { :data []
                       :num-dumps 0
                       :out-fname-format
-                        "out/supre_court_%04d.json.gz"
+                        "out/supre_court_%04d.json"
                    }})
 
 (defn is-item-from-source? [ source item ]
@@ -93,7 +90,7 @@
   (update-all-sources-fn buffer)))
 
 (defn save-data [ fname data ]
-  (spit fname (cc/generate-string data)))
+  (spit fname (cc/generate-string data {:pretty true})))
 
 (defn save-buffer-dump-one-source [ n source buffer ]
   (if (<= (count (get-in buffer [ source :data ])) n)
@@ -141,67 +138,87 @@
        ]
     (save-all-sources-fn buffer)))
 
-(defn handle-buffer [ [buffer url error] ]
+(defn handle-buffer [ extend-item-f [buffer url error] ]
   (let [
           [items url-next error]
             (fetch-items url)
+          items*
+            (map extend-item-f items)
            buffer*
              (if (and url-next (not error))
                (save-buffer-overhead
-                 (update-buffer buffer items))
+                 (update-buffer buffer items*))
                (save-buffer-rest
                  (save-buffer-overhead
-                   (update-buffer buffer items))))
+                   (update-buffer buffer items*))))
         ]
-  [ buffer* url-next error]))
+  [ buffer* url-next error ]))
 
+(defn expand-division-id [ division-id->cc-division
+                           division-id->sc-division
+                           judgment]
+  (case (:courtType judgment)
+    "COMMON"
+       (update-in
+         judgment
+         [:division]
+         #(division-id->cc-division (:id %)))
+    "SUPREME"
+       (update-in
+         judgment
+         [:division]
+         #(division-id->sc-division (:id %)))
+     judgment))
 
-(defn fetch-courts-all [ url ]
-  (fetch-items-all
-    "https://saos-test.icm.edu.pl/api/dump/"))
-
-;; Generate map division-id->court
-
-(defn conv-divisions-to-map [ divisions ]
+(defn fetch-buffer-all [ url  division-id->cc-division
+                              division-id->sc-division ]
   (let [
-         divisions-keys (map :id divisions)
-         divisions-vals (map #(dissoc % :id) divisions)
+         handle-buffer-f
+          (partial handle-buffer
+             (partial expand-division-id
+                division-id->cc-division
+                division-id->sc-division))
         ]
-    (zipmap divisions-keys divisions-vals)))
+  (last
+    (take-while
+      is-there-more?
+      (iterate handle-buffer-f [ empty-buffer url nil ])))
+  nil))
 
-(defn has-division-data? [ division-id court ]
-  (if (contains? (:divisions court) division-id)
-    (assoc-in court [:divisions ]
-         (assoc ((:divisions court)  division-id) :id division-id))
-    nil))
+;; COURTS and DIVISION
 
-(defn get-court-data [ division-id courts ]
-  (->> courts
-       (map #(update-in % [:divisions] conv-divisions-to-map))
-       (some #(has-division-data? division-id %))))
+;; Generate map division-id->cc-division
 
-;; Generate map division-id->court
-
-(defn gen-division-id->court-items [court]
+(defn gen-division-id->cc-division-items [ court ]
   (let [
          empty-court
            (dissoc court :divisions)
          divisions
            (:divisions court)
-         create-court-item-fn
-           #(vector (:id %) (assoc empty-court :division %))
+         create-division-item-fn
+           #(vector (:id %) (assoc % :court empty-court))
        ]
-    (map create-court-item-fn divisions)))
+    (map create-division-item-fn divisions)))
 
-
-(defn gen-division-id->court-map [ courts ]
+(defn gen-division-id->cc-division-map [ courts ]
   (into
     {}
-    (mapcat gen-division-id->court-items courts)))
+    (mapcat gen-division-id->cc-division-items courts)))
 
-(defn fetch-buffer-all [url]
-  (last
-   (take-while
-     is-there-more?
-     (iterate handle-buffer [ empty-buffer url nil ])))
-  nil)
+;; Generate map division-id->sc-division
+
+(defn gen-division-id->sc-division-items [ chamber ]
+  (let [
+         empty-chamber
+           (dissoc chamber :divisions)
+         divisions
+           (:divisions chamber)
+         create-division-item-fn
+           #(vector (:id %) (assoc % :chamber empty-chamber))
+       ]
+    (map create-division-item-fn divisions)))
+
+(defn gen-division-id->sc-division-map [ chambers ]
+  (into
+    {}
+    (mapcat gen-division-id->sc-division-items chambers)))
