@@ -4,6 +4,10 @@
            [pjstadig.assertions :as pa]
            [squeezer.core :as sq]))
 
+(defn die!! [ msg ]
+  (println msg)
+  (System/exit 1))
+
 (defn ^:private get-url-next [ links ]
   (let [
           is-rel-next-fn?
@@ -73,7 +77,7 @@
                    }})
 
 (defn is-item-from-source? [ source item ]
-  (get-in item [ :source :code ]))
+  (= source (get-in item [ :source :code ])))
 
 ;; Advanced version with sources splitting
 
@@ -111,8 +115,8 @@
       (and (= (get-in item [ :source :code ]) "COMMON_COURT")
            (= (get-in item
                  [ :division :court :type ]) "APPEAL"))
-     (pa/assert false
-         (str "Problem parsing judgment " (:id item) "."))))
+    (die!!
+      (str "[ERROR] Unknown source " source "."))))
 
 (defn filter-source [ source items ]
   (filter
