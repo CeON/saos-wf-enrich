@@ -12,6 +12,15 @@
   + Sąd apelacyjny = Appeal court
   + Sąd okręgowy = Regional court
   + Sąd rejonowy = District court
+* Directory naming
+  auxi - auxillary data
+  case - enrich with referenced case numbers
+  regu - enrich with referenced regulations
+  prty - enrich with parties
+  appe - enrich with appeals
+  keyw - enrich with keywords
+  sdoc - enrich with similar documents
+
 * Techicalities
   + Riffle API DOCs
     http://factual.github.io/riffle/
