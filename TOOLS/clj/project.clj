@@ -22,9 +22,17 @@
 
   :dependencies [
     [org.clojure/clojure "1.6.0"]
+    [pjstadig/assertions "0.1.0"] ;; Runtime assertions
+
     [me.raynes/fs "1.4.6"]  ;; Filesystem utilities
     [cheshire "5.3.1"]  ;; JSON support
-    [clj-http "1.0.1"] ;; http client 
+    [clj-http "1.0.1"] ;; http client
+
+    [byte-streams "0.2.0-alpha3"] ;; converter between bytes
+    [com.taoensso/nippy "2.7.1"] ;; serializer
+    [factual/riffle "0.1.2"] ;; filesystem k/v store
+
+    [squeezer "0.1.0"] ;; utilities for compressed files
   ]
 
   ; PLUGINS + CONFIGURATION
