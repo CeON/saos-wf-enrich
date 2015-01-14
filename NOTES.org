@@ -1,0 +1,17 @@
+* SAOS API
+  + Judgments
+     /api/dump/judgments
+    https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/judgment/DumpJudgmentsController.java
+  + Courts
+    /api/dump/courts
+    https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/court/DumpCourtsController.java
+  + Chambers
+    /api/dump/scChambers
+    https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/supreme/court/chamber/DumpSupremeCourtChambersController.java
+* Common Courts terminology
+  + Sąd apelacyjny = Appeal court
+  + Sąd okręgowy = Regional court
+  + Sąd rejonowy = District court
+* Techicalities
+  + Riffle API DOCs
+    http://factual.github.io/riffle/
