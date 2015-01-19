@@ -1,13 +1,20 @@
 * SAOS API
-  + Judgments
+** Getting
+   + Judgments
      /api/dump/judgments
-    https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/judgment/DumpJudgmentsController.java
-  + Courts
-    /api/dump/courts
-    https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/court/DumpCourtsController.java
-  + Chambers
-    /api/dump/scChambers
-    https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/supreme/court/chamber/DumpSupremeCourtChambersController.java
+     https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/judgment/DumpJudgmentsController.java
+   + Courts
+     /api/dump/courts
+     https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/court/DumpCourtsController.java
+   + Chambers
+     /api/dump/scChambers
+     https://github.com/CeON/saos/blob/master/saos-restful-web-api/src/main/java/pl/edu/icm/saos/api/dump/supreme/court/chamber/DumpSupremeCourtChambersController.java
+** Posting
+   + JSON format
+     https://github.com/CeON/saos/blob/master/saos-enrichment/src/main/java/pl/edu/icm/saos/enrichment/upload/EnrichmentTagItem.java
+     judgmentID: Integer
+     tagType: String
+     vallue: String
 * Common Courts terminology
   + Sąd apelacyjny = Appeal court
   + Sąd okręgowy = Regional court
