@@ -33,11 +33,19 @@
     [factual/riffle "0.1.2"] ;; filesystem k/v store
 
     [squeezer "0.1.0"] ;; utilities for compressed files
+    [commons-io/commons-io "2.4"]
+    [org.apache.tika/tika-parsers "1.6"]
+
+    ;; Following dependencies are added via checkouts
+    [hashlab "0.1.0-SNAPSHOT"] ;; Bloom filter utilities
+    [saos-tm.extractor "0.2.0-SNAPSHOT"]
   ]
 
   ; PLUGINS + CONFIGURATION
 
-  :plugins [[codox "0.8.10"]]
+  :plugins
+    [ [lein-checkouts "1.1.0"]
+      [codox "0.8.10"] ]
 
   ;; codox configuration
 
