@@ -1,6 +1,6 @@
 (bob-module)
 
-(load-clj-file "../../bob-common.clj")
+(load-clj-file "../../bob_common.clj")
 
 (defrule*
   [ [ (out* COMMO-COURT-JSON-FILES) (tag "commo-court-json")]
