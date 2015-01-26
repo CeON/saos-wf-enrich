@@ -4,4 +4,5 @@
   (import-module-dir
      "inp"
      "case"
-     "parties"))
+     "parties"
+     "law-links"))
