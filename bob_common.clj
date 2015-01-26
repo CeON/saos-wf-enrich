@@ -2,7 +2,7 @@
 
 (def MOD-PATH "../../")
 
-; FUNCTION DEFINITIONS
+; GLOBAL FUNCTION DEFINITIONS
 
 (defn conv-fname [ fname old-prefix new-prefix old-suffix new-suffix ]
   (-> fname
@@ -35,10 +35,41 @@
 (def CASE-DICT-JSON-FILE
    "../../case/case-dict/out/case-dict.json.gz")
 
-(def CASE-TAG-ALL-COURT-JSON-FILES
+(defn conv-inp-json-to-case-tag-files [files]
   (map
      #(conv-fname %
         "../../inp/json/out/"
-        "../../case/case-tags/out"
+        "../../case/case-tags/out/tags"
         ".json.gz" "_case_tag.json.gz")
+     files))
+
+;; CASE TAG
+
+(def CASE-TAG-SUPRE-COURT-JSON-FILES
+  (conv-inp-json-to-case-tag-files SUPRE-COURT-JSON-FILES))
+
+(def CASE-TAG-COMMO-COURT-JSON-FILES
+  (conv-inp-json-to-case-tag-files COMMO-COURT-JSON-FILES))
+
+(def CASE-TAG-ALL-COURT-JSON-FILES
+  (conv-inp-json-to-case-tag-files ALL-COURT-JSON-FILES))
+
+;; PARTIES-TAG
+
+(def PARTIES-TAG-COMMO-COURT-JSON-FILES
+  (map
+     #(conv-fname %
+        "../../inp/json/out/"
+        "../../parties/tags/out/tags"
+        ".json.gz" "_parties_tag.json.gz")
+     COMMO-COURT-JSON-FILES))
+
+;; LAW-LINKS-TAG
+
+(def LAW-LINKS-TAG-ALL-COURT-JSON-FILES
+  (map
+     #(conv-fname %
+        "../../inp/json/out/"
+        "../../law-links/tags/out/tags"
+        ".json.gz" "_law_links_tag.json.gz")
      ALL-COURT-JSON-FILES))

@@ -36,8 +36,8 @@
     [commons-io/commons-io "2.4"]
     [org.apache.tika/tika-parsers "1.6"]
 
+    [langlab "1.2.0"] ;; language utilities
     ;; Following dependencies are added via checkouts
-    [hashlab "0.1.0-SNAPSHOT"] ;; Bloom filter utilities
     [saos-tm.extractor "0.2.0-SNAPSHOT"]
   ]
 
