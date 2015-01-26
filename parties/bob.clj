@@ -2,6 +2,4 @@
 
 (defrule*
   (import-module-dir
-     "inp"
-     "case"
-     "parties"))
+     "tags"))
