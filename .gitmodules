@@ -1,0 +1,3 @@
+[submodule "TOOLS/clj/checkouts/saos-tm.extractor"]
+	path = TOOLS/clj/checkouts/saos-tm.extractor
+	url = https://github.com/CeON/saos-tm.extractor
