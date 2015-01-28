@@ -8,4 +8,4 @@ if [ ! -d out ]; then
 fi
 
 JVM_OPTS=-Xmx2g
-java ${JVM_OPTS} -ea -cp "$CLOJURE_JAR" clojure.main ./fetch-json.clj
+java ${JVM_OPTS} -ea -cp "$CLOJURE_JAR" clojure.main ./fetch_json.clj
