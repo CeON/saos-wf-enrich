@@ -11,7 +11,7 @@
     x))
 
 (defn gen-law-links-rule [ inp-fname out-fname ]
-    [ CLJ-CMD
+    [ (file CLJ-CMD)
       (inp "./gene_law_links_tags.clj")
       (apply inp (sequentialize inp-fname))
       (apply out (sequentialize out-fname)) ])

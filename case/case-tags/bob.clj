@@ -3,7 +3,7 @@
 (load-clj-file "../../bob_common.clj")
 
 (defn make-stat-rule [[ script switch inp-files out-file]]
-  [ CLJ-CMD switch (inp script) (inp inp-files) ">" (out out-file)])
+  [ (file CLJ-CMD) switch (inp script) (inp inp-files) ">" (out out-file)])
 
 (defn gen-stat-rules []
   (map
@@ -35,7 +35,7 @@
 
 (defrule
   (concat
-     [[ CLJ-CMD
+     [[ (file CLJ-CMD)
         (inp "./gene-case-tags.clj")
         (inp CASE-DICT-JSON-FILE)
         (inp  ALL-COURT-JSON-FILES)
