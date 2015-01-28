@@ -41,19 +41,22 @@
                    (:textContent j))
                  (catch Exception e
                    (println "Problem for id=" id)
-                   (:textContent j)))
-              nil)
+                   nil))
+              (:textContent j))
           law-links
-            (when text
-              (try
-                (ll/extract-law-links text act-dictionary)
-              (catch Exception e
-                (println "Links problem for id=" id)
-                nil)))
+            (if text
+               (try
+                 (:extracted-links
+                    (ll/extract-law-links text act-dictionary))
+                (catch Exception e
+                  (do
+                    (println "Link problem for id=" id)
+                    [])))
+                [])
           ]
     [ { :id id
         :tagType "LAW_LINKS"
-        :value (:extracted-links law-links) } ]))
+        :value law-links } ]))
 
 (defn process [inp-fname out-fname]
   (let [
