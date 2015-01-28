@@ -5,27 +5,8 @@
    '[cheshire.core :as cc]
    '[langlab.core.parsers :as lp]
    '[squeezer.core :as sc]
+   '[saos-tm.extractor.common :as lc]
    '[saos-tm.extractor.law-links :as ll])
-
-(import '[org.apache.commons.io IOUtils]
-        '[org.apache.tika.parser Parser ParseContext]
-        '[org.apache.tika.parser.html HtmlParser]
-        '[org.apache.tika.language LanguageIdentifier]
-        '[org.apache.tika.metadata Metadata]
-        '[org.apache.tika Tika]
-        '[org.apache.tika.sax BodyContentHandler])
-
-(defn conv-html-to-text [^String s]
-  (let [
-         istream (IOUtils/toInputStream s "UTF-8");
-         parser (HtmlParser.)
-         context (ParseContext.)
-         metadata (Metadata.)
-         handler (BodyContentHandler.)
-       ]
-    (.set context Parser parser)
-    (.parse parser istream handler metadata context)
-    (.toString  handler)))
 
 (def act-dictionary
   (ll/load-dictionary (io/resource "act_dictionary.txt")))
@@ -37,7 +18,7 @@
           text
             (if (= court-type "COMMON")
               (try
-                 (conv-html-to-text
+                 (lc/conv-html-to-text
                    (:textContent j))
                  (catch Exception e
                    (println "Problem for id=" id)

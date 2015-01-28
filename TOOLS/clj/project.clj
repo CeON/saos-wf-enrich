@@ -33,9 +33,6 @@
     [factual/riffle "0.1.2"] ;; filesystem k/v store
 
     [squeezer "0.1.0"] ;; utilities for compressed files
-    [commons-io/commons-io "2.4"]
-    [org.apache.tika/tika-parsers "1.6"]
-
     [langlab "1.2.0"] ;; language utilities
     ;; Following dependencies are added via checkouts
     [saos-tm.extractor "0.2.0-SNAPSHOT"]
