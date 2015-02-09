@@ -50,22 +50,33 @@
          (str/trim (apply str result*))
          (recur result* remaining*))))))
 
+(defn clean-parties [ p ]
+  (if p
+    (zipmap (keys p) (map strip-anon (vals p)))
+    {}))
+
+
 (defn conv-judgment-to-tag [j]
   (if-not (= (:judgmentType j) "SENTENCE")
     []
     (let [
           id (:id j)
           court-type (:courtType j)
+          include-judgment?
+             (= "COMMON" court-type)
           parties
-            (if-let [ p (pt/extract-parties-osp (:textContent j))]
-              (zipmap
-                (keys p)
-                (map strip-anon (vals p)))
+            (if include-judgment?
+              (if (= "Karny" (get-in j [:division :type]))
+                { :prosecutor
+                  (:plaintiff (clean-parties (pt/extract-parties-osp-criminal (:textContent j))))}
+                (clean-parties (pt/extract-parties-osp-civil (:textContent j))))
               {})
           ]
-    [ { :id id
-        :tagType "PARTIES"
-        :value parties} ])))
+    (if (empty? parties)
+      []
+      [ { :id id
+         :tagType "PARTIES"
+         :value parties} ]))))
 
 (defn process [inp-fname out-fname]
   (let [
