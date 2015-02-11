@@ -38,7 +38,7 @@
          source-re
            (re-pattern (str "^" source))
          inp-files
-           (filter-files source-re ALL-COURT-JSON-FILES)
+           (filter-files source-re CASE-TAG-ALL-COURT-JSON-FILES)
          out-file
            (str "out/stat/" source out-suffix)
         ]
