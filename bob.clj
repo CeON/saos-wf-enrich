@@ -2,7 +2,8 @@
 
 (defrule*
   (import-module-dir
-     "inp"
+     "get"
      "case"
      "parties"
-     "law-links"))
+     "law-links"
+     "put"))

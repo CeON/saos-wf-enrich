@@ -18,12 +18,12 @@
 (def COMMO-COURT-JSON-FILES
   (sort
     (ls-cur-dir-with-path
-      (str MOD-PATH "inp/json/out/") #"commo.*json.gz")))
+      (str MOD-PATH "get/json/out/") #"commo.*json.gz")))
 
 (def SUPRE-COURT-JSON-FILES
   (sort
     (ls-cur-dir-with-path
-      (str MOD-PATH "inp/json/out/") #"supre.*json.gz")))
+      (str MOD-PATH "get/json/out/") #"supre.*json.gz")))
 
 (def ALL-COURT-JSON-FILES
   (concat
@@ -38,7 +38,7 @@
 (defn conv-inp-json-to-case-tag-files [files]
   (map
      #(conv-fname %
-        "../../inp/json/out/"
+        "../../get/json/out/"
         "../../case/case-tags/out/tags"
         ".json.gz" "_case_tag.json.gz")
      files))
@@ -59,7 +59,7 @@
 (def PARTIES-TAG-COMMO-COURT-JSON-FILES
   (map
      #(conv-fname %
-        "../../inp/json/out/"
+        "../../get/json/out/"
         "../../parties/tags/out/tags"
         ".json.gz" "_parties_tag.json.gz")
      COMMO-COURT-JSON-FILES))
@@ -69,7 +69,7 @@
 (def LAW-LINKS-TAG-ALL-COURT-JSON-FILES
   (map
      #(conv-fname %
-        "../../inp/json/out/"
+        "../../get/json/out/"
         "../../law-links/tags/out/tags"
         ".json.gz" "_law_links_tag.json.gz")
      ALL-COURT-JSON-FILES))
