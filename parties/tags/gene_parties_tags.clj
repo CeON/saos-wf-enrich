@@ -55,8 +55,27 @@
     (zipmap (keys p) (map strip-anon (vals p)))
     {}))
 
-
 (defn conv-judgment-to-tag [j]
+  (if-not (= (:judgmentType j) "SENTENCE")
+    []
+    (let [
+          id (:id j)
+          court-type (:courtType j)
+          include-judgment?
+             (and  (= "COMMON" court-type)
+                   (not= "Pracy i Ubezpieczeń Społecznych" (get-in j [:division :type])))
+          parties
+            (if include-judgment?
+              (clean-parties (pt/extract-parties-osp-civil (:textContent j)))
+              {})
+          ]
+    (if (empty? parties)
+      []
+      [ { :id id
+         :tagType "PARTIES"
+         :value parties} ]))))
+
+(defn conv-judgment-to-tag* [j]
   (if-not (= (:judgmentType j) "SENTENCE")
     []
     (let [
@@ -67,8 +86,7 @@
           parties
             (if include-judgment?
               (if (= "Karny" (get-in j [:division :type]))
-                { :prosecutor
-                  (:plaintiff (clean-parties (pt/extract-parties-osp-criminal (:textContent j))))}
+                (clean-parties (pt/extract-parties-osp-criminal (:textContent j)))
                 (clean-parties (pt/extract-parties-osp-civil (:textContent j))))
               {})
           ]
