@@ -1,4 +1,6 @@
 /TOOLS/clj/out
 */*/out*
+/put/json/auto/
 .nrepl-port
 expt-*
+aux
