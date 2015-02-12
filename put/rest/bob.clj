@@ -6,5 +6,5 @@
   [ (file CLJ-CMD)
     (inp "./put_json.clj")
     (inp "./auto")
-    (inp CASE-TAG-EVERY-COURT-JSON-FILES)
+    (inp REF-CASES-TAG-FILES)
     ">" (out "out/put_json.log") ])

@@ -9,7 +9,7 @@
              #".*"
              (re-pattern (str "^" court-type)))
          inp-files
-           (filter-files court-type-re CASE-TAG-EVERY-COURT-JSON-FILES)
+           (filter-files court-type-re REF-CASES-TAG-FILES)
          out-file
            (str "out/stat/" court-type out-suffix)
         ]
@@ -20,9 +20,9 @@
   (concat
      [[ (file CLJ-CMD)
         (inp "./gene_case_tags.clj")
-        (inp CASE-DICT-JSON-FILE)
-        (inp EVERY-COURT-JSON-FILES)
-        (out CASE-TAG-EVERY-COURT-JSON-FILES) ]]
+        (inp REF-CASES-DICT-FILE)
+        (inp EVERY-COURT-FILES)
+        (out REF-CASES-TAG-FILES) ]]
         (mapcat
           #(concat
              (gen-stat-rules % "./gene_case_stat_sum.clj" "" "_sum.txt")

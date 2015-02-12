@@ -21,14 +21,14 @@
 
 ; INPUT FILES
 
-(def EVERY-COURT-JSON-FILES
+(def EVERY-COURT-FILES
   (sort
     (ls-cur-dir-with-path
       (str MOD-PATH "get/rest/out/") #".*json.gz")))
 
 ; OUTPUT FILES
 
-(def CASE-DICT-JSON-FILE
+(def REF-CASES-DICT-FILE
    "../../case/case-dict/out/case-dict.json.gz")
 
 (defn conv-inp-json-to-case-tag-files [files]
@@ -39,7 +39,7 @@
         ".json.gz" "_ref_court_case_tag.json.gz")
      files))
 
-;; CASE TAG
+;; REF CASES TAG
 
-(def CASE-TAG-EVERY-COURT-JSON-FILES
-  (conv-inp-json-to-case-tag-files EVERY-COURT-JSON-FILES))
+(def REF-CASES-TAG-FILES
+  (conv-inp-json-to-case-tag-files EVERY-COURT-FILES))

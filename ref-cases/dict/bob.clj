@@ -4,6 +4,6 @@
 
 (defrule
   [ [ (file CLJ-CMD)
-      (inp "gene-case-dict.clj")
-      (out CASE-DICT-JSON-FILE)
-      (inp EVERY-COURT-JSON-FILES)] ])
+      (inp "gene_case_dict.clj")
+      (out REF-CASES-DICT-FILE)
+      (inp EVERY-COURT-FILES)] ])
