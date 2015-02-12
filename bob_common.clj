@@ -34,9 +34,9 @@
 (defn conv-inp-json-to-case-tag-files [files]
   (map
      #(conv-fname %
-        "../../get/json/out/"
-        "../../case/case-tags/out/tags"
-        ".json.gz" "_case_tag.json.gz")
+        "../../get/rest/out/"
+        "../../ref-case/tags/out/json"
+        ".json.gz" "_ref_court_case_tag.json.gz")
      files))
 
 ;; CASE TAG

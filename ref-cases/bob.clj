@@ -2,5 +2,5 @@
 
 (defrule*
   (import-module-dir
-     "case-dict"
-     "case-tags"))
+     "dict"
+     "tags"))
