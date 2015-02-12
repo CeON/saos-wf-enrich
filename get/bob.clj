@@ -2,4 +2,4 @@
 
 (defrule*
   (import-module-dir
-     "json"))
+     "rest"))

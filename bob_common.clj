@@ -24,7 +24,7 @@
 (def EVERY-COURT-JSON-FILES
   (sort
     (ls-cur-dir-with-path
-      (str MOD-PATH "get/json/out/") #".*json.gz")))
+      (str MOD-PATH "get/rest/out/") #".*json.gz")))
 
 ; OUTPUT FILES
 
