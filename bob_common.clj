@@ -7,8 +7,8 @@
 
 (defn conv-fname [ fname old-prefix new-prefix old-suffix new-suffix ]
   (-> fname
-        (str/replace (re-pattern (str "^" old-prefix)) new-prefix)
-              (str/replace (re-pattern (str old-suffix "$")) new-suffix)))
+      (str/replace (re-pattern (str "^" old-prefix)) new-prefix)
+      (str/replace (re-pattern (str old-suffix "$")) new-suffix)))
 
 (defn filter-files [ base-regexp fnames ]
   (filter

@@ -33,16 +33,18 @@
 ;      [ "./gene-case-stat-ids.clj" ""
 ;        CASE-TAG-COMMO-COURT-JSON-FILES "out/stat/stat-ids-commo-court.txt" ] ]))
 
-(defn gen-stat-rules [ source script switch out-suffix ]
+(defn gen-stat-rules [ court-type script switch out-suffix ]
   (let [
-         source-re
-           (re-pattern (str "^" source))
+         court-type-re
+           (if (= court-type "every_court")
+             #".*"
+             (re-pattern (str "^" court-type)))
          inp-files
-           (filter-files source-re CASE-TAG-ALL-COURT-JSON-FILES)
+           (filter-files court-type-re CASE-TAG-ALL-COURT-JSON-FILES)
          out-file
-           (str "out/stat/" source out-suffix)
+           (str "out/stat/" court-type out-suffix)
         ]
-    [ [ (file CLJ-CMD) switch (inp script) (inp inp-files)
+    [ [ (file CLJ-CMD) (inp script) switch (inp inp-files)
           ">" (out out-file) ]]))
 
 (defrule
@@ -52,4 +54,10 @@
         (inp CASE-DICT-JSON-FILE)
         (inp  ALL-COURT-JSON-FILES)
         (out  CASE-TAG-ALL-COURT-JSON-FILES) ]]
-     (gen-stat-rules "commo_court" "./gene_case_stat_ids.clj" "" "_stat_ids.txt" )))
+        (mapcat
+          #(concat
+             (gen-stat-rules % "./gene_case_stat_sum.clj" "" "_sum.txt")
+             (gen-stat-rules % "./gene_case_stat_frq.clj" "" "_frq.txt")
+             (gen-stat-rules % "./gene_case_stat_frq.clj" "-r" "_frq_resolved.txt")
+             (gen-stat-rules %"./gene_case_stat_ids.clj" "" "_ids.txt"))
+             [ "every_court" "commo_court" "supre_court" "const_tribu" "appea_chamb" ])))
