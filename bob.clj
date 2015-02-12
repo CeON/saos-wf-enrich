@@ -3,5 +3,5 @@
 (defrule*
   (import-module-dir
      "get"
-     "case"
+     "ref-cases"
      "put"))

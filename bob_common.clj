@@ -29,14 +29,14 @@
 ; OUTPUT FILES
 
 (def REF-CASES-DICT-FILE
-   "../../case/case-dict/out/case-dict.json.gz")
+   "../../ref-cases/dict/out/case_dict.json.gz")
 
 (defn conv-inp-json-to-case-tag-files [files]
   (map
      #(conv-fname %
         "../../get/rest/out/"
-        "../../ref-case/tags/out/json"
-        ".json.gz" "_ref_court_case_tag.json.gz")
+        "../../ref-cases/tags/out/json"
+        ".json.gz" "_ref_cases_tag.json.gz")
      files))
 
 ;; REF CASES TAG
