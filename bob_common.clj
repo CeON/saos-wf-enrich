@@ -21,7 +21,7 @@
 
 ; INPUT FILES
 
-(def ALL-COURT-JSON-FILES
+(def EVERY-COURT-JSON-FILES
   (sort
     (ls-cur-dir-with-path
       (str MOD-PATH "get/json/out/") #".*json.gz")))
@@ -41,5 +41,5 @@
 
 ;; CASE TAG
 
-(def CASE-TAG-ALL-COURT-JSON-FILES
-  (conv-inp-json-to-case-tag-files ALL-COURT-JSON-FILES))
+(def CASE-TAG-EVERY-COURT-JSON-FILES
+  (conv-inp-json-to-case-tag-files EVERY-COURT-JSON-FILES))

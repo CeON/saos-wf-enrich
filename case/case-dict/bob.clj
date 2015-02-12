@@ -6,4 +6,4 @@
   [ [ (file CLJ-CMD)
       (inp "gene-case-dict.clj")
       (out CASE-DICT-JSON-FILE)
-      (inp ALL-COURT-JSON-FILES)] ])
+      (inp EVERY-COURT-JSON-FILES)] ])
