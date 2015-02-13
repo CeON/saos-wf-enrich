@@ -8,13 +8,13 @@
   (sort-by m #(compare %2 %1) (keys m)))
 
 (defn get-only-resolved-case-numbers [ tag ]
-  (map :referencedCaseNumber
+  (map :caseNumber
     (filter
-      #(not= nil (:referencedIds %))
+      #(not= nil (:judgmentIds %))
       (:value tag))))
 
 (defn get-all-case-numbers [tag]
-  (map :referencedCaseNumber (:value tag)))
+  (map :caseNumber (:value tag)))
 
 (defn conv-fname-to-stat-frq [ get-case-numbers-f fname ]
   (as-> fname ---

@@ -6,7 +6,7 @@
 
 (defn get-only-resolved-case-numbers [ tag ]
   (filter
-    #(not= nil (:referencedIds %))
+    #(not (empty? (:judgmentIds %)))
     (:value tag)))
 
 (defn conv-fname-to-stat-sum [ fname ]

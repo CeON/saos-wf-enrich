@@ -9,9 +9,9 @@
 
 (defn get-id-counts [ tag ]
   (map
-    #(count (:referencedIds %))
+    #(count (:judgmentIds %))
     (filter
-      #(not= nil (:referencedIds %))
+      #(not= nil (:judgmentIds %))
       (:value tag))))
 
 (defn conv-fname-to-stat-ids [ fname ]
