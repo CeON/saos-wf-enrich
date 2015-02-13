@@ -19,22 +19,27 @@
                 (jc/conv-html-to-text
                   (:textContent j))
                 (catch Exception e
-                  (println "Problem for id=" id)
+                  (println "id=" id ", error converting html-to-text")
                   (:textContent j)))
              (:textContent j))
          dirty-referenced-case-numbers
-           (jl/extract-all-signatures text)
+           (if-let [ cn (jl/extract-all-signatures text) ]
+             cn
+             (do
+                (println "id=" id "" ", null extracting signature")
+                #{}))
+
          referenced-case-numbers
            (set/difference
              dirty-referenced-case-numbers this-case-numbers)
          referenced-case-numbers-tag-value
            (map
-             #(hash-map :referencedCaseNumber %
-                        :referencedIds (case-number->ids %))
+             #(hash-map :caseNumber %
+                        :judgmentIds (case-number->ids % []))
              referenced-case-numbers)
        ]
-    { :id id
-      :tagType "REFERENCED_CASE_NUMBERS"
+    { :judgmentId id
+      :tagType "REFERENCED_COURT_CASES"
       :value referenced-case-numbers-tag-value}))
 
 (defn process [case-number->ids inp-fname out-fname]
