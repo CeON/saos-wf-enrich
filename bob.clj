@@ -4,4 +4,5 @@
   (import-module-dir
      "get"
      "ref-cases"
+     "cas-pties"
      "put"))
