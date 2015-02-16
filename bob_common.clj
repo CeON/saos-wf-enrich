@@ -26,8 +26,21 @@
     (ls-cur-dir-with-path
       (str MOD-PATH "get/rest/out/") #".*json.gz")))
 
+(def APPEA-CHAMB-FILES
+  (filter-files #"^appea_chamb" EVERY-COURT-FILES))
+
+(def COMMO-COURT-FILES
+  (filter-files #"^commo_court" EVERY-COURT-FILES))
+
+(def CONST-TRIBU-FILES
+  (filter-files #"^const_tribu" EVERY-COURT-FILES))
+
+(def SUPRE-COURT-FILES
+  (filter-files #"^supre_court" EVERY-COURT-FILES))
+
 ; OUTPUT FILES
 
+;; REF CASES TAG
 (def REF-CASES-DICT-FILE
    "../../ref-cases/dict/out/case_dict.json.gz")
 
@@ -39,7 +52,16 @@
         ".json.gz" "_ref_cases_tag.json.gz")
      files))
 
-;; REF CASES TAG
 
 (def REF-CASES-TAG-FILES
   (conv-inp-json-to-case-tag-files EVERY-COURT-FILES))
+
+;; CASe ParTIES tag
+
+(def CAS-PTIES-TAG-FILES
+  (map
+     #(conv-fname %
+        "../../get/rest/out/"
+        "../../cas-pties/tags/out/json"
+        ".json.gz" "_cas_pties_tag.json.gz")
+    COMMO-COURT-FILES))
