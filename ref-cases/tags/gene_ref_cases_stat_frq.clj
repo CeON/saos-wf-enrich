@@ -13,6 +13,12 @@
       #(not= [] (:judgmentIds %))
       (:value tag))))
 
+(defn get-only-unresolved-case-numbers [ tag ]
+  (map :caseNumber
+    (filter
+      #(= [] (:judgmentIds %))
+      (:value tag))))
+
 (defn get-all-case-numbers [tag]
   (map :caseNumber (:value tag)))
 
@@ -39,6 +45,7 @@
       print-stat))
 
 (when (> (count *command-line-args*) 0)
-  (if (= (first *command-line-args*) "-r")
-    (run get-only-resolved-case-numbers (rest *command-line-args*))
+  (case (first *command-line-args*)
+    "-r" (run get-only-resolved-case-numbers (rest *command-line-args*))
+    "-u" (run get-only-unresolved-case-numbers (rest *command-line-args*))
     (run get-all-case-numbers *command-line-args*)))

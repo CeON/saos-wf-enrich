@@ -37,6 +37,6 @@
       #(concat
          (gen-stat-rules % "./gene_ref_cases_stat_sum.clj" "" "_sum.txt")
          (gen-stat-rules % "./gene_ref_cases_stat_frq.clj" "" "_frq.txt")
-         (gen-stat-rules % "./gene_ref_cases_stat_frq.clj" "-r" "_frq_resolved.txt")
+         (gen-stat-rules % "./gene_ref_cases_stat_frq.clj" "-u" "_frq_unresolved.txt")
          (gen-stat-rules %"./gene_ref_cases_stat_ids.clj" "" "_ids.txt"))
          [ "every_court" "commo_court" "supre_court" "const_tribu" "appea_chamb" ])))
