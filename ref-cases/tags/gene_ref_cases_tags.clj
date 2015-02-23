@@ -38,9 +38,11 @@
                         :judgmentIds (case-number->ids % []))
              referenced-case-numbers)
        ]
-    { :judgmentId id
-      :tagType "REFERENCED_COURT_CASES"
-      :value referenced-case-numbers-tag-value}))
+    (if-not (empty? referenced-case-numbers)
+      [ { :judgmentId id
+          :tagType "REFERENCED_COURT_CASES"
+          :value referenced-case-numbers-tag-value } ]
+      [])))
 
 (defn process [case-number->ids inp-fname out-fname]
   (let [
@@ -49,7 +51,7 @@
              sc/slurp-compr
              (cc/parse-string true))
           out-data
-            (map
+            (mapcat
               (partial conv-judgment-to-tag case-number->ids)
               inp-data)
        ]
