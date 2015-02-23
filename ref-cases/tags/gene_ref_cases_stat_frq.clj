@@ -10,7 +10,7 @@
 (defn get-only-resolved-case-numbers [ tag ]
   (map :caseNumber
     (filter
-      #(not= nil (:judgmentIds %))
+      #(not= [] (:judgmentIds %))
       (:value tag))))
 
 (defn get-all-case-numbers [tag]
