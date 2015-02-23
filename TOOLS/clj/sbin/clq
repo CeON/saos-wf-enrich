@@ -1,0 +1,11 @@
+#!/bin/bash
+
+JVM_OPTS="-Xmx2g -Djava.net.preferIPv6Addresses=true"
+
+BREAKCHARS="(){}[],^%$#@\"\";:''|\\"
+
+START_DIR=`dirname $0`
+
+CLOJURE_JAR="${START_DIR}"/../target/clj-standalone.jar
+
+java ${JVM_OPTS} -ea -jar "$CLOJURE_JAR" "$@"

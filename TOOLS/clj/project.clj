@@ -12,17 +12,12 @@
   :uberjar-name "clj-standalone.jar"
   :aot :all
   :omit-source true
-  :main clj.core
-
-  ;; Options used by Java
-  ;;; run with assertions enabled
-  :jvm-opts ["-ea"]
+  :main clj.query
 
   ; DEPENDENCIES
 
   :dependencies [
     [org.clojure/clojure "1.6.0"]
-    [pjstadig/assertions "0.1.0"] ;; Runtime assertions
 
     [me.raynes/fs "1.4.6"]  ;; Filesystem utilities
     [cheshire "5.3.1"]  ;; JSON support
@@ -33,8 +28,10 @@
     [factual/riffle "0.1.2"] ;; filesystem k/v store
 
     [squeezer "0.1.0"] ;; utilities for compressed files
-    [langlab "1.2.0"] ;; language utilities
-    ;; Following dependencies are added via checkouts
+    [langlab "1.2.0"]  ;; language utilities
+    [paralab "0.1.0"]  ;; parallel programming tools
+
+;; Following dependencies are added via checkouts
     [saos-tm.extractor "0.2.0-SNAPSHOT"]
   ]
 
