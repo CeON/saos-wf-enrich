@@ -1,6 +1,30 @@
 (require '[cheshire.core :as cc])
 (require '[clj.rest-get :as get])
 
+(def SAOS-API-DUMP-URL "https://saos-test.icm.edu.pl/api/dump/")
+
+(defn create-expand-id-function
+  [ division-id->cc-division division-id->sc-division chamber-id->sc-chamber]
+  (fn [ judgment ]
+    (case (:courtType judgment)
+      "COMMON"
+         (update-in
+           judgment
+           [:division]
+           #(division-id->cc-division (:id %)))
+      "SUPREME"
+         (-> judgment
+           (update-in
+             [:division]
+             #(division-id->sc-division (:id %)))
+           (update-in
+             [:chambers]
+             (fn [chambers]
+               (map
+                 #(chamber-id->sc-chamber (:id %))
+                 chambers))))
+       judgment)))
+
 (def court-type->out-fname-format
   { "COMMON"  "out/commo_court_%04d.json.gz"
     "SUPREME" "out/supre_court_%04d.json.gz"
@@ -8,8 +32,19 @@
     "NATIONAL_APPEAL_CHAMBER" "out/appea_chamb_%04d.json.gz"})
 
 (defn run []
+  (let [
+         division-id->cc-division
+           (get/fetch-common-court-divisions SAOS-API-DUMP-URL)
+         [division-id->sc-division chamber-id->sc-chamber]
+           (get/fetch-supreme-court-divisions SAOS-API-DUMP-URL)
+         transform-f
+           (create-expand-id-function
+             division-id->cc-division division-id->sc-division chamber-id->sc-chamber)
+        ]
   (get/fetch-buffer-all
-    "https://saos-test.icm.edu.pl/api/dump/judgments?pageSize=100&pageNumber=0"
-    court-type->out-fname-format))
+    (str SAOS-API-DUMP-URL
+       "judgments?pageSize=100&pageNumber=0&withGenerated=false")
+    court-type->out-fname-format
+    transform-f)))
 
 (run)

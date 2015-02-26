@@ -44,6 +44,7 @@
            (if error
              [ [] nil ]
              (get-items-and-url-next-fn
+
                (cc/parse-string (:body response) true)))
        ]
     [items url-next error]))
@@ -165,3 +166,71 @@
         is-there-more?
         (iterate handle-buffer-f [ empty-buffer url nil ])))
     nil)))
+
+; Logic for fetching divisions and chambers names
+
+;; Common Courts
+
+(defn ^:private gen-division-id->cc-division-items [ court ]
+  (let [
+         empty-court
+           (dissoc court :divisions)
+         divisions
+           (:divisions court)
+         create-division-item-fn
+           #(vector (:id %) (assoc % :court empty-court))
+       ]
+    (map create-division-item-fn divisions)))
+
+(defn ^:private gen-division-id->cc-division-map [ courts ]
+  (into
+    {}
+    (mapcat gen-division-id->cc-division-items courts)))
+
+(defn fetch-common-court-divisions [ saos-api-dump-url ]
+  (let [
+         common-courts
+           (first
+             (fetch-items-all
+               (str saos-api-dump-url "courts?pageSize=100&pageNumber=0")))
+        ]
+    (gen-division-id->cc-division-map common-courts)))
+
+;; Supreme Courts
+
+(defn ^:private gen-division-id->sc-division-items [ chamber ]
+  (let [
+         empty-chamber
+           (dissoc chamber :divisions)
+         divisions
+           (:divisions chamber)
+         create-division-item-fn
+           #(vector (:id %) (assoc % :chamber empty-chamber))
+       ]
+    (map create-division-item-fn divisions)))
+
+(defn ^:private gen-division-id->sc-division-map [ chambers ]
+  (into
+    {}
+    (mapcat gen-division-id->sc-division-items chambers)))
+
+(defn ^:private gen-chamber-id->sc-chamber-map [chambers]
+  (let [
+         chamber-keys
+           (map :id chambers)
+         chamber-values
+           (map #(dissoc % :divisions) chambers)
+        ]
+        (zipmap chamber-keys chamber-values)))
+
+(defn fetch-supreme-court-divisions [ saos-api-dump-url ]
+  (let [
+         supreme-court-chambers
+           (first
+             (fetch-items-all
+               (str saos-api-dump-url
+                 "scChambers?pageSize=100&pageNumber=0")))
+
+        ]
+    [ (gen-division-id->sc-division-map supreme-court-chambers)
+      (gen-chamber-id->sc-chamber-map supreme-court-chambers) ]))
