@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd get/json
-./get_json.sh
+cd get/rest
+time -p ./get_json.sh
