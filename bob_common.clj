@@ -70,3 +70,16 @@
         "../../cas-pties/tags/out/json/"
         ".json.gz" "_cas_pties_tag.json.gz")
     COMMO-COURT-FILES))
+
+;; REFerenced REGUlationS
+
+(def REF-REGUS-INP-FILES
+  (concat APPEA-CHAMB-FILES CONST-TRIBU-FILES SUPRE-COURT-FILES))
+
+(def REF-REGUS-TAG-FILES
+  (map
+     #(conv-fname %
+        "../../get/rest/out/"
+        "../../ref-regus/tags/out/json"
+        ".json.gz" "_ref_regus_tag.json.gz")
+     REF-REGUS-INP-FILES))
