@@ -80,6 +80,6 @@
   (map
      #(conv-fname %
         "../../get/rest/out/"
-        "../../ref-regus/tags/out/json"
+        "../../ref-regus/tags/out/json/"
         ".json.gz" "_ref_regus_tag.json.gz")
      REF-REGUS-INP-FILES))
