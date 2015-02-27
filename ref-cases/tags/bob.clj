@@ -25,14 +25,9 @@
     (inp judgment-files)
     (out tag-files) ])
 
-(defn gen-partitioned-rules [judgment-files tag-files]
- (map gen-ref-cases-tags-rule
-   (partition-all N judgment-files)
-   (partition-all N tag-files)))
-
 (defrule
   (concat
-    (gen-partitioned-rules  EVERY-COURT-FILES REF-CASES-TAG-FILES)
+    (gen-partitioned-rules N gen-ref-cases-tags-rule EVERY-COURT-FILES REF-CASES-TAG-FILES)
     (mapcat
       #(concat
          (gen-stat-rules % "./gene_ref_cases_stat_sum.clj" "" "_sum.txt")

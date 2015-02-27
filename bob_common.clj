@@ -15,6 +15,10 @@
     #(re-find base-regexp (fs/base-name %))
     fnames))
 
+(defn gen-partitioned-rules [ n gen-rule-f & file-lists ]
+  (apply (partial map gen-rule-f)
+    (map (partial partition-all n) file-lists)))
+
 ; TOOLS
 
 (def CLJ-CMD (str MOD-PATH "TOOLS/clj/sbin/clj"))
@@ -24,7 +28,7 @@
 (def EVERY-COURT-FILES
   (sort
     (ls-cur-dir-with-path
-      (str MOD-PATH "get/rest/out/") #".*json.gz")))
+      (str MOD-PATH "get/rest/out") #".*json.gz")))
 
 (def APPEA-CHAMB-FILES
   (filter-files #"^appea_chamb" EVERY-COURT-FILES))
@@ -41,6 +45,7 @@
 ; OUTPUT FILES
 
 ;; REF CASES TAG
+
 (def REF-CASES-DICT-FILE
    "../../ref-cases/dict/out/case_dict.json.gz")
 
@@ -51,7 +56,6 @@
         "../../ref-cases/tags/out/json"
         ".json.gz" "_ref_cases_tag.json.gz")
      files))
-
 
 (def REF-CASES-TAG-FILES
   (conv-inp-json-to-case-tag-files EVERY-COURT-FILES))

@@ -13,11 +13,6 @@
     (inp judgment-files)
     (out tag-files) ])
 
-(defn gen-partitioned-rules [n rule-f judgment-files tag-files]
- (map rule-f
-    (partition-all n judgment-files)
-    (partition-all n tag-files)))
-
 (defrule
   (concat
      (gen-stat-rules)
