@@ -31,3 +31,6 @@
 * Techicalities
   + Riffle API DOCs
     http://factual.github.io/riffle/
+  + Internal test server
+    http://192.168.28.232:8080/saos-webapp/api/enrichment/tags
+    pass=pass, user the same as in production
