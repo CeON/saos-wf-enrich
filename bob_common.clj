@@ -22,6 +22,7 @@
 ; TOOLS
 
 (def CLJ-CMD (str MOD-PATH "TOOLS/clj/sbin/clj"))
+(def CLQ-CMD (str MOD-PATH "TOOLS/clj/sbin/clq"))
 
 ; INPUT FILES
 
@@ -53,7 +54,7 @@
   (map
      #(conv-fname %
         "../../get/rest/out/"
-        "../../ref-cases/tags/out/json"
+        "../../ref-cases/tags/out/json/"
         ".json.gz" "_ref_cases_tag.json.gz")
      files))
 
@@ -66,6 +67,6 @@
   (map
      #(conv-fname %
         "../../get/rest/out/"
-        "../../cas-pties/tags/out/json"
+        "../../cas-pties/tags/out/json/"
         ".json.gz" "_cas_pties_tag.json.gz")
     COMMO-COURT-FILES))
