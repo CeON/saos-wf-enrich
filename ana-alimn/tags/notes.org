@@ -1,0 +1,2 @@
+* Po takim regexpie zostaje 70 wyroków:
+  "apelację oddala\|oddala apelację\|powództwo oddala\|oddala powództwo\|zasądza.*alimenty\|zasądza.*alimentów\|zasądza.*rentę.*alimentacyjną\|obniża.*alimenty\|podwyższa.*alimenty"
