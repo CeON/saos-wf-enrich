@@ -192,7 +192,7 @@
          common-courts
            (first
              (fetch-items-all
-               (str saos-api-dump-url "courts?pageSize=100&pageNumber=0")))
+               (str saos-api-dump-url "commonCourts?pageSize=100&pageNumber=0")))
         ]
     (gen-division-id->cc-division-map common-courts)))
 
