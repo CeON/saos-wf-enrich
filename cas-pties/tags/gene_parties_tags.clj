@@ -55,11 +55,6 @@
     (zipmap (keys m) (map strip-anon (vals m)))
     {}))
 
-(defn clean-parties-criminal [ m ]
-  (set/rename-keys
-    (clean-parties m)
-    {:plaintiff :prosecutor}))
-
 (defn conv-judgment-to-tag [j]
   (if-not (= (:judgmentType j) "SENTENCE")
     []
@@ -73,19 +68,17 @@
              ;      (not= "Pracy i Ubezpieczeń Społecznych"
              ;            (get-in j [:division :type])
           parties
-            (if include-judgment?
-              (if (= "Karny" (get-in j [:division :type]))
-                (clean-parties-criminal
-                  (pt/extract-parties-osp-criminal (:textContent j)))
-                (clean-parties
-                    (pt/extract-parties-osp-civil (:textContent j))))
-              {})
+             (if include-judgment?
+               (if (= "Karny" (get-in j [:division :type]))
+                 (pt/extract-parties-osp-criminal (:textContent j))
+                 (pt/extract-parties-osp-civil (:textContent j)))
+               {})
           ]
     (if (empty? parties)
       []
       [ { :judgmentId id
           :tagType "PARTIES"
-          :value parties} ]))))
+          :value (clean-parties parties)} ]))))
 
 (defn process [inp-fname out-fname]
   (let [
