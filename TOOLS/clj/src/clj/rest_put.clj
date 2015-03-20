@@ -28,6 +28,7 @@
              (.setRequestProperty "Authorization" basic-auth)
              (.setDoInput true)
              (.setDoOutput true)
+             (.setChunkedStreamingMode 0)
              (.setRequestProperty "Content-Type" "application/json")
              (.setRequestProperty "Accept" "application/json"))
         ]
@@ -38,4 +39,8 @@
 
 (defn get-message-and-response-code [ conn ]
   { :code (. conn getResponseCode)
-    :message (. conn getResponseMessage) })
+    :message (. conn getResponseMessage)
+  })
+
+(defn get-response [conn]
+  (slurp (. conn getInputStream)))

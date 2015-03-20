@@ -30,9 +30,27 @@
          conn (put/create-url-conn url user-colon-pass)
        ]
   (with-open [ w (put/get-conn-stream conn) ]
-    (.write w "[")
-    (dorun (map #(.write w %) data-seq))
-    (.write w "]" ))
+    (loop [
+            data-seq (concat "[" data-seq "]")
+          ]
+      (let [
+             data-seq* (rest data-seq)
+             data-item ^String (first data-seq)
+             _ (.write w "{ \"empty\" : \"empty\" }")
+             ;_
+             ;  (.write w data-item)
+             { :keys [:message :code ] }
+               (put/get-message-and-response-code conn)
+             _ (do
+                 (println "Returned code: " code)
+                 (println "Message: " message))
+             stop
+               (or (not (seq data-seq)) (not= code 200 ))
+            ]
+        (if stop
+          ;(put/get-response conn)
+          1
+          (recur data-seq*)))))
   (put/get-message-and-response-code conn)))
 
 (defn run [ argv ]
@@ -40,13 +58,13 @@
          user-colon-pass (str/trim (slurp (first argv)))
          argv* (rest argv)
          url "https://saos-test.icm.edu.pl/api/enrichment/tags"
-         { :keys [:message :code ] }
-           (put-data-files url user-colon-pass argv*)
-         _  (println (str "Returned code " code ". " message "."))
+         _ (println
+             (put-data-files url user-colon-pass argv*))
        ]
-    (if (= code 200)
-      0
-      1)))
+    1))
+;    (if (= code 200)
+;      0
+;      1)))
 
 (when (> (count *command-line-args*) 0)
   (System/exit
