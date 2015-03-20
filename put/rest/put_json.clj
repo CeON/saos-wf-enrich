@@ -22,49 +22,55 @@
   (strip-string-from-parentheses
     (sc/slurp-compr fname)))
 
+(defn write-seq-to-stream [ i w conn data-seq ]
+  (let [
+          _ (println "Iterating..." i)
+          data-seq* (rest data-seq)
+          data-item ^String (first data-seq)
+          _
+            (do 
+              (.write w data-item)
+              (.flush w))
+         stop
+            (not (seq data-seq*))
+       ]
+       (if stop
+         (do
+           (.close w)   
+           (put/get-response conn))
+         (recur (inc i) w conn data-seq*))))
+
 (defn put-data-files [ url user-colon-pass fnames ]
   (let [
          data-seq
-          (interpose ","
-            (map read-file-content fnames))
+           (interpose ","
+             (map read-file-content fnames))
+         data-seq-with-parens 
+           (concat [ "[" ] data-seq [ "]" ])
          conn (put/create-url-conn url user-colon-pass)
-       ]
-  (with-open [ w (put/get-conn-stream conn) ]
-    (loop [
-            data-seq (concat "[" data-seq "]")
-          ]
-      (let [
-             data-seq* (rest data-seq)
-             data-item ^String (first data-seq)
-             _ (.write w "{ \"empty\" : \"empty\" }")
-             ;_
-             ;  (.write w data-item)
-             { :keys [:message :code ] }
-               (put/get-message-and-response-code conn)
-             _ (do
-                 (println "Returned code: " code)
-                 (println "Message: " message))
-             stop
-               (or (not (seq data-seq)) (not= code 200 ))
-            ]
-        (if stop
-          ;(put/get-response conn)
-          1
-          (recur data-seq*)))))
-  (put/get-message-and-response-code conn)))
+         w (put/get-conn-stream conn)
+         write-chunk-f
+           #(do (.write w %) (.flush w))
+         _  
+           (dorun
+             (map write-chunk-f data-seq-with-parens))
+         _ (.close w)
+      ]
+    (put/get-response conn)))
 
 (defn run [ argv ]
   (let [
          user-colon-pass (str/trim (slurp (first argv)))
          argv* (rest argv)
          url "https://saos-test.icm.edu.pl/api/enrichment/tags"
-         _ (println
-             (put-data-files url user-colon-pass argv*))
+         response
+           (put-data-files url user-colon-pass argv*)
+         _
+           (println response)
        ]
-    1))
-;    (if (= code 200)
-;      0
-;      1)))
+    (if (= 200 (:code response))
+       0 
+       1)))
 
 (when (> (count *command-line-args*) 0)
   (System/exit

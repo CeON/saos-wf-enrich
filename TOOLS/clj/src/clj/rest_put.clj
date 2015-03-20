@@ -28,19 +28,30 @@
              (.setRequestProperty "Authorization" basic-auth)
              (.setDoInput true)
              (.setDoOutput true)
-             (.setChunkedStreamingMode 0)
+             (.setChunkedStreamingMode 8000)
              (.setRequestProperty "Content-Type" "application/json")
              (.setRequestProperty "Accept" "application/json"))
         ]
     conn))
 
-(defn get-conn-stream [ conn ]
+(defn get-conn-stream [conn]
   (OutputStreamWriter. (. conn getOutputStream)))
 
-(defn get-message-and-response-code [ conn ]
-  { :code (. conn getResponseCode)
-    :message (. conn getResponseMessage)
-  })
-
 (defn get-response [conn]
-  (slurp (. conn getInputStream)))
+  (let [
+         code 
+           (. conn getResponseCode)
+         message
+           (. conn getResponseMessage)
+         content 
+           (if (= 200 code)
+             (slurp (. conn getInputStream))
+             (slurp (. conn getErrorStream)))
+     ]
+   { :code code 
+     :message message
+     :content content }))
+
+
+
+
