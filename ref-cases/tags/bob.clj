@@ -4,7 +4,7 @@
 
 (def N 20)
 
-(defn gen-stat-rules [court-type script switch out-suffix]
+(defn gen-stat-rules [court-type q-script out-suffix]
   (let [
          court-type-re
            (if (= court-type "every_court")
@@ -15,7 +15,7 @@
          out-file
            (str "out/stat/" court-type out-suffix)
         ]
-    [ [ (file CLJ-CMD) (inp script) switch (inp inp-files)
+    [ [ (file CLQ-CMD) "-p1" (inp q-script) (inp inp-files)
           ">" (out out-file) ]]))
 
 (defn gen-ref-cases-tags-rule [judgment-files tag-files]
@@ -30,8 +30,8 @@
     (gen-partitioned-rules N gen-ref-cases-tags-rule EVERY-COURT-FILES REF-CASES-TAG-FILES)
     (mapcat
       #(concat
-         (gen-stat-rules % "./gene_ref_cases_stat_sum.clj" "" "_sum.txt")
-         (gen-stat-rules % "./gene_ref_cases_stat_frq.clj" "" "_frq.txt")
-         (gen-stat-rules % "./gene_ref_cases_stat_frq.clj" "-u" "_frq_unresolved.txt")
-         (gen-stat-rules %"./gene_ref_cases_stat_ids.clj" "" "_ids.txt"))
+         (gen-stat-rules % "./q_ref_cases_stat_sum.clj" "_sum.txt")
+         (gen-stat-rules % "./q_ref_cases_stat_frq.clj" "_frq.txt")
+         (gen-stat-rules % "./q_ref_cases_stat_frq_unresolved.clj" "_frq_unresolved.txt")
+         (gen-stat-rules % "./q_ref_cases_stat_ids.clj""_ids.txt"))
          [ "every_court" "commo_court" "supre_court" "const_tribu" "appea_chamb" ])))
