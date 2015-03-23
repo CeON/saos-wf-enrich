@@ -6,6 +6,23 @@
    '[saos-tm.extractor.judgment-links :as jl]
    '[clj.common :as cljc])
 
+(defn is-resolved? [ tag-value ]
+  (not= [] (:judgmentIds tag-value)))
+
+(defn sort-by-case-number [ tag-values ]
+  (sort #(compare (:caseNumber %1) (:caseNumber %2)) tag-values))
+
+(defn sort-tag-value [ tag-values ]
+  (let [
+        tag-values-resolved
+          (sort-by-case-number
+            (filter is-resolved? tag-values))
+        tag-values-unresolved
+          (sort-by-case-number
+            (filter (complement is-resolved?) tag-values))
+        ]
+    (concat tag-values-resolved  tag-values-unresolved)))
+
 (defn conv-judgment-to-tag [ case-number->ids j]
   (let [
          id (:id j)
@@ -40,10 +57,11 @@
              dirty-referenced-case-numbers this-case-numbers)
 
          referenced-case-numbers-tag-value
-           (map
-             #(hash-map :caseNumber %
-                        :judgmentIds (case-number->ids % []))
-             referenced-case-numbers)
+           (sort-tag-value
+             (map
+               #(hash-map :caseNumber %
+                         :judgmentIds (case-number->ids % []))
+               referenced-case-numbers))
        ]
     (if-not (empty? referenced-case-numbers)
       [ { :judgmentId id
