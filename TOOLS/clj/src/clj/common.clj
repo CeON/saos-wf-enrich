@@ -10,3 +10,7 @@
     (with-open [r (sqc/reader-compr fname)]
       (into []
         (cc/parse-stream r expand-to-keywords)))))
+
+(defn println-err [ & args ]
+  (dorun
+    (map #(.println *err* %) args)))

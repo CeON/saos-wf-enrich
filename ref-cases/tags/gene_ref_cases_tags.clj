@@ -3,35 +3,42 @@
    '[cheshire.core :as cc]
    '[squeezer.core :as sc]
    '[saos-tm.extractor.common :as jc]
-   '[saos-tm.extractor.judgment-links :as jl])
+   '[saos-tm.extractor.judgment-links :as jl]
+   '[clj.common :as cljc])
 
 (defn conv-judgment-to-tag [ case-number->ids j]
   (let [
          id (:id j)
+
          court-type (:courtType j)
+
          this-case-numbers
            (into
              #{}
              (map :caseNumber (:courtCases j)))
+
          text
            (if (= court-type "COMMON")
              (try
-                (jc/conv-html-to-text
-                  (:textContent j))
+                (jc/conv-html-to-text (:textContent j))
                 (catch Exception e
-                  (println "id=" id ", error converting html-to-text")
+                  (cljc/println-err
+                    (format "ERROR, converting html to text failed for id=%d" id))
                   (:textContent j)))
              (:textContent j))
+
          dirty-referenced-case-numbers
-           (if-let [ cn (jl/extract-all-signatures text) ]
-             cn
-             (do
-                (println "id=" id "" ", null extracting signature")
-                #{}))
+           (try
+             (jl/extract-all-signatures text)
+             (catch Exception e
+               (cljc/println-err
+                 (format "ERROR, extracting singnatres for id=%d failed" id))
+               #{}))
 
          referenced-case-numbers
            (set/difference
              dirty-referenced-case-numbers this-case-numbers)
+
          referenced-case-numbers-tag-value
            (map
              #(hash-map :caseNumber %
