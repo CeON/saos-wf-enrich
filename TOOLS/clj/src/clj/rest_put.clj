@@ -39,19 +39,15 @@
 
 (defn get-response [conn]
   (let [
-         code 
+         code
            (. conn getResponseCode)
          message
            (. conn getResponseMessage)
-         content 
+         content
            (if (= 200 code)
              (slurp (. conn getInputStream))
              (slurp (. conn getErrorStream)))
      ]
-   { :code code 
+   { :code code
      :message message
      :content content }))
-
-
-
-

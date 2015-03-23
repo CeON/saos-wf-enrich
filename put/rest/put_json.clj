@@ -22,36 +22,18 @@
   (strip-string-from-parentheses
     (sc/slurp-compr fname)))
 
-(defn write-seq-to-stream [ i w conn data-seq ]
-  (let [
-          _ (println "Iterating..." i)
-          data-seq* (rest data-seq)
-          data-item ^String (first data-seq)
-          _
-            (do 
-              (.write w data-item)
-              (.flush w))
-         stop
-            (not (seq data-seq*))
-       ]
-       (if stop
-         (do
-           (.close w)   
-           (put/get-response conn))
-         (recur (inc i) w conn data-seq*))))
-
 (defn put-data-files [ url user-colon-pass fnames ]
   (let [
          data-seq
            (interpose ","
              (map read-file-content fnames))
-         data-seq-with-parens 
+         data-seq-with-parens
            (concat [ "[" ] data-seq [ "]" ])
          conn (put/create-url-conn url user-colon-pass)
          w (put/get-conn-stream conn)
          write-chunk-f
            #(do (.write w %) (.flush w))
-         _  
+         _
            (dorun
              (map write-chunk-f data-seq-with-parens))
          _ (.close w)
@@ -69,7 +51,7 @@
            (println response)
        ]
     (if (= 200 (:code response))
-       0 
+       0
        1)))
 
 (when (> (count *command-line-args*) 0)
