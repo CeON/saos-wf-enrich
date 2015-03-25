@@ -16,14 +16,9 @@
           id (:id j)
           court-type (:courtType j)
           text
-            (if (= court-type "COMMON")
-              (try
-                 (lc/conv-html-to-text
-                   (:textContent j))
-                 (catch Exception e
-                   (println "Problem for id=" id)
-                   nil))
-              (:textContent j))
+            (if (not= court-type "COMMON")
+              (:textContent j)
+              nil)
           law-links
             (if text
                (try
@@ -31,13 +26,17 @@
                     (ll/extract-law-links text act-dictionary))
                 (catch Exception e
                   (do
-                    (println "Link problem for id=" id)
+                    (println
+                      (format
+                        "ERROR, extracting referenced regulations for id=%d failed" id))
                     [])))
                 [])
           ]
-    [ { :id id
-        :tagType "LAW_LINKS"
-        :value law-links } ]))
+    (if-not (empty? law-links)
+      [ { :id id
+          :tagType "LAW_LINKS"
+          :value law-links } ]
+      [])))
 
 (defn process [inp-fname out-fname]
   (let [
