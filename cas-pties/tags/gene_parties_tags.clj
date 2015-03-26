@@ -32,28 +32,32 @@
         (drop 3 s-seq) ]
       [ (first s-seq) (rest s-seq) ])))
 
-(defn strip-anon [ s ]
-  (if-not (string? s)
-    (map strip-anon s)
-    (loop [
-           result []
-           remaining (lp/split* s start-stop-anon-re)
-         ]
-     (let [
-            [ new remaining* ]
-              (if (is-start-anon? (first remaining))
-                (handle-start-anon remaining)
-                [ (first remaining) (rest remaining) ])
-             result*
-              (conj result new)
+(defn strip-anon [ ^String s ]
+  (loop [
+         result []
+         remaining (lp/split* s start-stop-anon-re)
+        ]
+    (let [
+           [ new remaining* ]
+             (if (is-start-anon? (first remaining))
+               (handle-start-anon remaining)
+               [ (first remaining) (rest remaining) ])
+           result*
+             (conj result new)
           ]
        (if (empty? remaining*)
          (str/trim (apply str result*))
-         (recur result* remaining*))))))
+         (recur result* remaining*)))))
+
+(defn clean-map-entry [ [k v] ]
+  (if v
+    [[k (strip-anon v)]]
+    []))
 
 (defn clean-parties [ m ]
   (if m
-    (zipmap (keys m) (map strip-anon (vals m)))
+    (into {}
+      (mapcat clean-map-entry m))
     {}))
 
 (defn conv-judgment-to-tag [j]
