@@ -4,7 +4,7 @@
    '[cheshire.core :as cc]
    '[langlab.core.parsers :as lp]
    '[squeezer.core :as sc]
-   '[saos-tm.extractor.osp-parties :as pt]
+   '[saos-tm.extractor.cc-parties :as pt]
    '[clj.common :as cljc])
 
 (def start-anon "<span class=\"anon-block\">")
@@ -76,8 +76,8 @@
              (if include-judgment?
                (try
                  (if (= "Karny" (get-in j [:division :type]))
-                   (pt/extract-parties-osp-criminal (:textContent j))
-                   (pt/extract-parties-osp-civil (:textContent j)))
+                   (pt/extract-parties-cc-criminal (:textContent j))
+                   (pt/extract-parties-cc-civil (:textContent j)))
                  (catch Exception e
                    (cljc/println-err
                      (format "ERROR, extracting parties for id=%d failed" id))
