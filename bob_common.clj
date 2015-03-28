@@ -88,3 +88,16 @@
         "../../ref-regus/tags/out/json/"
         ".json.gz" "_ref_regus_tag.json.gz")
      REF-REGUS-INP-FILES))
+
+;; KEYWORDS ISAP
+
+(def LAW-JOURN-DICT-FILE
+  "../../aux/law_journal_dict.json.gz")
+
+(def KWDS-ISAP-TAG-FILES
+  (map
+     #(conv-fname %
+        "../../get/rest/out/"
+        "../../kwds-isap/tags/out/json/"
+        ".json.gz" "_kwds_isap_tag.json.gz")
+    COMMO-COURT-FILES))
