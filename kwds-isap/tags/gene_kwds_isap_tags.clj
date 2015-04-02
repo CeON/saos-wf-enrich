@@ -1,26 +1,33 @@
 (require
   '[cheshire.core :as cc]
-  '[squeezer.core :as sc])
+  '[squeezer.core :as sc]
+  '[clj.query :as q])
 
-(defn clean-keywords [ [ k v ] ]
+(defn keywordize-law-journal-dict-entry [ entry ]
   (let [
-          clean-f
-            #(if (> (count %) 6)
-               []
-               %)
+         keywords
+           (get entry "keywords")
         ]
-  [ k (update-in v [ "keywords" ] clean-f) ]))
+    (if (empty? keywords)
+      {}
+      (zipmap
+        keywords
+        (repeat (float (/ 1.0 (count keywords))))))))
+
 
 (defn read-law-journal-dict [ fname ]
   (let [
          raw-law-journal-dict
            (with-open [r (sc/reader-compr fname)]
              (cc/parse-stream  r false))
+         keys
+          (keys raw-law-journal-dict)
+         vals-new
+           (map
+             keywordize-law-journal-dict-entry
+             (vals raw-law-journal-dict))
         ]
-    (into {}
-      (map
-        clean-keywords
-        raw-law-journal-dict))))
+    (zipmap keys vals-new)))
 
 (defn conv-ref-regu-to-key [ ref-regu ]
   (let [
@@ -31,12 +38,9 @@
      x))
 
 (defn conv-one-ref-regu-to-keywords [law-journal-dict ref-regu]
-  (if-let [
-           ref-regu-record
-             (law-journal-dict (conv-ref-regu-to-key ref-regu))
-          ]
-       (frequencies (ref-regu-record "keywords"))
-    {}))
+  (get law-journal-dict
+       (conv-ref-regu-to-key ref-regu)
+       {}))
 
 (defn conv-ref-regus-to-keywords [law-journal-dict ref-regus]
   (reduce
@@ -45,13 +49,24 @@
       (partial conv-one-ref-regu-to-keywords law-journal-dict)
       ref-regus)))
 
+(defn conv-map-to-sorted-pairs [ isap-keywords ]
+  (sort-by #(- (second %)) isap-keywords))
+
+(defn filter-keywords [ isap-keywords]
+  (into {}
+    (filter #(> (second %) 0.11) isap-keywords)))
+
+
 (defn conv-judgment-to-tag [law-journal-dict j]
   (let [
           id (:id j)
           court-type (:courtType j)
           ref-regus (:referencedRegulations j)
           keywords (:keywords j)
-          isap-keywords (conv-ref-regus-to-keywords law-journal-dict ref-regus)
+          isap-keywords
+            (filter-keywords
+              (conv-ref-regus-to-keywords
+                law-journal-dict ref-regus))
         ]
     (if-not (empty? ref-regus)
       [ { :id id
