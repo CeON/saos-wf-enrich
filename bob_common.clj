@@ -87,7 +87,7 @@
 ;; KEYWORDS ISAP
 
 (def LAW-JOURN-DICT-FILE
-  "../../aux/law_journal_dict.json.gz")
+  "../../ext/law_journal_dict.json.gz")
 
 (def KWDS-ISAP-TAG-FILES
   (map
