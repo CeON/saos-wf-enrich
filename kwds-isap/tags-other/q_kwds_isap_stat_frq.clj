@@ -7,7 +7,9 @@
 
 (defn get-kwds-isap [tag]
   (map name
-    (keys (get-in tag [:value :keywordsISAP]))))
+    (keys
+      (into {}
+        (get-in tag [:value :keywordsISAP])))))
 
 (defn calc-kwds-isap-frequencies [ tags ]
   (->> tags
