@@ -8,10 +8,32 @@
    '[saos-tm.extractor.common :as lc]
    '[saos-tm.extractor.law-links :as ll])
 
+(defn read-law-journal-dict [fname]
+  (with-open [r (sc/reader-compr fname)]
+    (cc/parse-stream  r false)))
+
 (def act-dictionary
   (ll/load-dictionary (io/resource "act_dictionary.txt")))
 
-(defn conv-judgment-to-tag [j]
+(defn get-ref-regu-title [ law-journal-dict ref-regu ]
+  (let [
+
+         key (str "D" (or (:journalYear ref-regu) 0) "/"
+                      (or (:journalNo ref-regu) 0) "/"
+                      (or (:journalEntry ref-regu) 0))
+        ]
+     (get-in law-journal-dict [key "title"])))
+
+(defn normalize-ref-regu [ law-journal-dict ref-regu ]
+  (let [
+         title
+          (get-ref-regu-title law-journal-dict (:act ref-regu))
+        ]
+    (if title
+      [ (assoc-in ref-regu [:act :journalTitle ] title) ]
+      [])))
+
+(defn conv-judgment-to-tag [law-journal-dict j]
   (let [
           id (:id j)
           court-type (:courtType j)
@@ -19,7 +41,7 @@
             (if (not= court-type "COMMON")
               (:textContent j)
               nil)
-          law-links
+          ref-regus-raw
             (if text
                (try
                  (:extracted-links
@@ -31,22 +53,26 @@
                         "ERROR, extracting referenced regulations for id=%d failed" id))
                     [])))
                 [])
+           ref-regus
+             (mapcat
+               (partial normalize-ref-regu law-journal-dict)
+               ref-regus-raw)
           ]
-    (if-not (empty? law-links)
+    (if-not (empty? ref-regus)
       [ { :id id
-          :tagType "LAW_LINKS"
-          :value law-links } ]
+          :tagType "REF_REGUS"
+          :value ref-regus } ]
       [])))
 
-(defn process [inp-fname out-fname]
+(defn process [law-journal-dict inp-fname out-fname]
   (let [
-         inp-data
+        inp-data
            (-> inp-fname
              sc/slurp-compr
              (cc/parse-string true))
           out-data
             (mapcat
-              conv-judgment-to-tag
+              (partial conv-judgment-to-tag law-journal-dict)
               inp-data)
        ]
     (sc/spit-compr
@@ -55,16 +81,20 @@
 
 (defn run [argv]
   (let [
+         law-journal-dict
+           (read-law-journal-dict (first argv))
+         argv*
+           (rest argv)
          n
-           (quot (count argv) 2)
+           (quot (count argv*) 2)
          inp-fnames
-           (take n argv)
+           (take n argv*)
          out-fnames
-           (drop n argv)
+           (drop n argv*)
         ]
   (dorun
     (map
-      process
+      (partial process law-journal-dict)
       inp-fnames out-fnames))))
 
 (when (> (count *command-line-args*) 0)
