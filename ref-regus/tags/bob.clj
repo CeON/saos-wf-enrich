@@ -7,6 +7,7 @@
 (defn gen-ref-regus-rule [ judgment-files tag-files ]
   [ (file CLJ-CMD)
     (inp "./gene_ref_regus_tags.clj")
+    (inp LAW-JOURN-DICT-FILE)
     (inp judgment-files)
     (out tag-files) ])
 
