@@ -93,6 +93,14 @@
   (map
      #(conv-fname %
         "../../get/rest/out/"
-        "../../kwds-isap/tags/out/json/"
+        "../../kwds-isap/tags-cc/out/json/"
         ".json.gz" "_kwds_isap_tag.json.gz")
     COMMO-COURT-FILES))
+
+(def KWDS-ISAP-OTHER-TAG-FILES
+  (map
+     #(conv-fname %
+        "../../ref-regus/tags/out/json/"
+        "../../kwds-isap/tags-other/out/json/"
+        "_ref_regus_tag.json.gz" "_kwds_isap_tag.json.gz")
+    REF-REGUS-TAG-FILES))
