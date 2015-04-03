@@ -31,9 +31,9 @@
 
 (defn conv-ref-regu-to-key [ ref-regu ]
   (let [
-         x (str "D" (or (:journalYear ref-regu) 0) "/"
-                    (or (:journalNo ref-regu) 0)"/"
-                    (or (:journalEntry ref-regu) 0))
+         x (str "D" (or (:journalYear ref-regu) "0") "/"
+                    (or (:journalNo ref-regu) "0") "/"
+                    (or (:journalEntry ref-regu) "0"))
         ]
      x))
 
