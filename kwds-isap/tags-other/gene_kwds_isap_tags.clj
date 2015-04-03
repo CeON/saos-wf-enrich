@@ -31,9 +31,9 @@
 
 (defn conv-ref-regu-to-key [ ref-regu ]
   (let [
-         x (str "D" (:year ref-regu) "/"
-                    (:journalNo ref-regu) "/"
-                    (:entry ref-regu))
+         x (str "D" (or (:journalYear ref-regu) 0) "/"
+                    (or (:journalNo ref-regu) 0)"/"
+                    (or (:journalEntry ref-regu) 0))
         ]
      x))
 
@@ -60,7 +60,8 @@
 (defn conv-regu-tag-to-keywords-tag [law-journal-dict tag]
   (let [
           id (:id tag)
-          ref-regus (distinct (map #(get % :act []) (:value tag)))
+          ref-regus
+            (distinct (map #(get % :act []) (:value tag)))
           isap-keywords
             (filter-keywords
               (conv-ref-regus-to-keywords
