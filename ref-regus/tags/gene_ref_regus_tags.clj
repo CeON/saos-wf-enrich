@@ -18,9 +18,9 @@
 (defn get-ref-regu-title [ law-journal-dict ref-regu ]
   (let [
 
-         key (str "D" (or (:journalYear ref-regu) 0) "/"
-                      (or (:journalNo ref-regu) 0) "/"
-                      (or (:journalEntry ref-regu) 0))
+         key (str "D" (or (:journalYear ref-regu) "0") "/"
+                      (or (:journalNo ref-regu) "0") "/"
+                      (or (:journalEntry ref-regu) "0"))
         ]
      (get-in law-journal-dict [key "title"])))
 
