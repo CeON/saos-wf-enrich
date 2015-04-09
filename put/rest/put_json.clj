@@ -26,7 +26,8 @@
   (let [
          data-seq
            (interpose ","
-             (map read-file-content fnames))
+             (filter (complement str/blank?)
+               (map read-file-content fnames)))
          data-seq-with-parens
            (concat [ "[" ] data-seq [ "]" ])
          conn (put/create-url-conn url user-colon-pass)
