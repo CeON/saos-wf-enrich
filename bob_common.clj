@@ -48,25 +48,34 @@
 ;; REF CASES TAG
 
 (def REF-CASES-DICT-FILE
-   "../../ref-cases/dict/out/case_dict.json.gz")
-
-(defn conv-inp-json-to-case-tag-files [files]
-  (map
-     #(conv-fname %
-        "../../get/rest/out/"
-        "../../ref-cases/tags/out/json/"
-        ".json.gz" "_ref_cases_tag.json.gz")
-     files))
+   "../../ref-cases/dict/out/ref_cases_dict.json.gz")
 
 (def REF-CASES-TAG-FILES
-  (conv-inp-json-to-case-tag-files EVERY-COURT-FILES))
+  (map
+     #(conv-fname %
+        "../../get/rest/out/" "../../ref-cases/tags/out/json/"
+        ".json.gz" "_ref_cases_tag.json.gz")
+     EVERY-COURT-FILES))
 
 ;; CASe ParTIES tag
 
 (def CAS-PTIES-TAG-FILES
   (map
      #(conv-fname %
-        "../../get/rest/out/"
-        "../../cas-pties/tags/out/json/"
+        "../../get/rest/out/" "../../cas-pties/tags/out/json/"
         ".json.gz" "_cas_pties_tag.json.gz")
     COMMO-COURT-FILES))
+
+;; ReferenciNG CASES TAG
+
+(def RNG-CASES-DICT-FILE
+   "../../rng-cases/dict/out/rng_cases_dict.json.gz")
+
+(def RNG-CASES-TAG-FILES
+  (map
+     #(conv-fname %
+        "../../get/rest/out/" "../../rng-cases/tags/out/json/"
+        ".json.gz" "_rng_cases_tag.json.gz")
+     EVERY-COURT-FILES))
+
+
