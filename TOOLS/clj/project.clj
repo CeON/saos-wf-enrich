@@ -30,7 +30,7 @@
     [squeezer "0.1.0"] ;; utilities for compressed files
     [langlab "1.2.0"]  ;; language utilities
     [paralab "0.1.0"]  ;; parallel programming tools
-
+    [hiccup "1.0.5"]   ;; html generators
 ;; Following dependencies are added via checkouts
     [saos-tm.extractor "0.2.0-SNAPSHOT"]
   ]
