@@ -30,8 +30,9 @@
     [squeezer "0.1.0"] ;; utilities for compressed files
     [langlab "1.2.0"]  ;; language utilities
     [paralab "0.1.0"]  ;; parallel programming tools
+    [automat "0.1.3"]   ;; finite state automata engine (remove after testing alt-ref-reg)
 
-;; Following dependencies are added via checkouts
+  ;; Following dependencies are added via checkouts
     [saos-tm.extractor "0.2.0-SNAPSHOT"]
   ]
 
