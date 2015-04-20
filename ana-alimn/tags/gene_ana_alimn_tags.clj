@@ -11,7 +11,7 @@
   (cond
     (re-find #"^o alimenty" s) "o alimenty"
     (re-find #"^o podwyższenie alimentów" s) "o podwyższenie alimentów"
-    (re-find #"^o obniżenie alimentów" s) "o podwyższenie alimentów"
+    (re-find #"^o obniżenie alimentów" s) "o obniżenie alimentów"
     :else "NIEZNANE"))
 
 (defn get-reason [s]
@@ -26,9 +26,15 @@
 (defn get-defendant-sex [ s ]
   (let [
           male
-            (some? (re-find #"(?i)\spozwany\s" s))
+            (some?
+              (or
+                (re-find #"(?i)\spozwany\s" s)
+                (re-find #"(?i)\spozwanego\s" s)))
           female
-            (some? (re-find #"(?i)\spozwana\s" s))
+            (some?
+              (or
+                (re-find #"(?i)\spozwana\s" s)
+                (re-find #"(?i)\spozwanej\s" s)))
        ]
     (case [male female]
        [ true true ] "both"
@@ -94,27 +100,27 @@
 
           increases
             (if (re-find #"(?i)podwyższa" raw-summary)
-              "PODWYŻSZA:"
+              "podwyższa:"
               "")
           decreases
             (if (re-find #"(?i)obniża" raw-summary)
-              "OBNIŻA:"
+              "obniża:"
               "")
           dismisses
             (if (re-find #"(?i)oddala" summary0)
-              "ODDALA:"
+              "oddala:"
               "")
           repeals
             (if (re-find #"(?i)^uchyla" summary0)
-              "UCHYLA:"
+              "uchyla:"
               "")
           awards
             (if (re-find #"(?i)^zasądza" summary0)
-              "ZASĄDZA:"
+              "zasądza:"
               "")
           changes
             (if (re-find #"(?i)^zmienia" summary0)
-              "ZMIENIA:"
+              "zmienia:"
               "?")
         ]
     (re-find
