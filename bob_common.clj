@@ -78,4 +78,11 @@
         ".json.gz" "_rng_cases_tag.json.gz")
      EVERY-COURT-FILES))
 
+;; REFerenced MONEY
 
+(def REF-MONEY-TAG-FILES
+  (map
+     #(conv-fname %
+        "../../get/rest/out/" "../../ref-money/tags/out/json/"
+        ".json.gz" "_ref_money_tag.json.gz")
+     EVERY-COURT-FILES))
