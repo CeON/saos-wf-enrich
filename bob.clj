@@ -6,4 +6,5 @@
      "ref-cases"
      "rng-cases"
      "cas-pties"
+     "ref-money"
      "put"))
