@@ -66,18 +66,6 @@
         ".json.gz" "_cas_pties_tag.json.gz")
     COMMO-COURT-FILES))
 
-;; ReferenciNG CASES TAG
-
-(def RNG-CASES-DICT-FILE
-   "../../rng-cases/dict/out/rng_cases_dict.json.gz")
-
-(def RNG-CASES-TAG-FILES
-  (map
-     #(conv-fname %
-        "../../get/rest/out/" "../../rng-cases/tags/out/json/"
-        ".json.gz" "_rng_cases_tag.json.gz")
-     EVERY-COURT-FILES))
-
 ;; REFerenced MONEY
 
 (def REF-MONEY-TAG-FILES
