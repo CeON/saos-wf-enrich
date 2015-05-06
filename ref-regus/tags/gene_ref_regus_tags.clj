@@ -12,26 +12,57 @@
   (with-open [r (sc/reader-compr fname)]
     (cc/parse-stream  r false)))
 
-(def act-dictionary
-  (ll/load-dictionary (io/resource "act_dictionary.txt")))
-
 (defn get-ref-regu-title [ law-journal-dict ref-regu ]
   (let [
-
          key (str "D" (or (:journalYear ref-regu) "0") "/"
                       (or (:journalNo ref-regu) "0") "/"
                       (or (:journalEntry ref-regu) "0"))
         ]
      (get-in law-journal-dict [key "title"])))
 
-(defn normalize-ref-regu [ law-journal-dict ref-regu ]
+(defn conv-arts-to-str [ arts ]
+  (apply str
+    (interpose ", "
+      (map lc/convert-art-to-str arts))))
+
+(defn clean-up-title [ title ]
+  (if (re-matches #".* r.$" title)
+    title
+    (str/replace title #"\.$" "")))
+
+(defn add-title-and-text-to-act [ law-journal-dict act-arts-map act]
+  (if-let [ title
+              (get-ref-regu-title law-journal-dict act) ]
+    (let [
+           text
+             (str (clean-up-title title)
+               " - " (conv-arts-to-str (act-arts-map act)))
+          ]
+      [ (assoc act :title title :text text) ])
+    []))
+
+(defn normalize-act-arts-pair [ [act arts] ]
+  [ act (into [] (distinct arts))])
+
+(defn normalize-ref-regus [ law-journal-dict ref-regus-raw ]
   (let [
-         title
-          (get-ref-regu-title law-journal-dict (:act ref-regu))
+         ref-regus-raw-act-distinct
+           (into [] (distinct (map :act ref-regus-raw)))
+         ref-regus-act-arts-map-raw
+           (reduce #(merge-with concat %1 %2)
+             (map
+               #(array-map (:act %) (vector (:art %)))
+               ref-regus-raw))
+          ref-regus-act-arts-map
+            (into {}
+              (map
+                normalize-act-arts-pair
+                ref-regus-act-arts-map-raw))
         ]
-    (if title
-      [ (assoc-in ref-regu [:act :journalTitle ] title) ]
-      [])))
+    (mapcat
+      (partial
+        add-title-and-text-to-act law-journal-dict ref-regus-act-arts-map)
+      ref-regus-raw-act-distinct)))
 
 (defn conv-judgment-to-tag [law-journal-dict j]
   (let [
@@ -45,7 +76,7 @@
             (if text
                (try
                  (:extracted-links
-                    (ll/extract-law-links text act-dictionary))
+                   (ll/extract-law-links-greedy text true true true))
                 (catch Exception e
                   (do
                     (println
@@ -54,9 +85,7 @@
                     [])))
                 [])
            ref-regus
-             (mapcat
-               (partial normalize-ref-regu law-journal-dict)
-               ref-regus-raw)
+            (normalize-ref-regus law-journal-dict ref-regus-raw)
           ]
     (if-not (empty? ref-regus)
       [ { :id id
