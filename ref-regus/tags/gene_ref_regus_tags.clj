@@ -68,33 +68,13 @@
         add-title-and-text-to-act law-journal-dict ref-regus-act-arts-map)
       ref-regus-raw-act-distinct)))
 
-(defn conv-judgment-to-tag [law-journal-dict j]
+(defn conv-raw-to-tag [law-journal-dict raw-tag]
   (let [
-          id (:id j)
-          court-type (:courtType j)
-          text
-            (if (not= court-type "COMMON")
-              (:textContent j)
-              nil)
-          ref-regus-raw
-            (if text
-               (try
-                 (:extracted-links
-                   (ell/extract-law-links-greedy text true true true))
-                (catch Exception e
-                  (do
-                    (println
-                      (format
-                        "ERROR, extracting referenced regulations for id=%d failed" id))
-                    [])))
-                [])
-           ref-regus
-            (normalize-ref-regus law-journal-dict ref-regus-raw)
+           normalized-ref-regus
+             (normalize-ref-regus law-journal-dict (:value raw-tag))
           ]
-    (if-not (empty? ref-regus)
-      [ { :id id
-          :tagType "REF_REGUS"
-          :value ref-regus } ]
+    (if-not (empty? normalized-ref-regus)
+      [ (assoc raw-tag :value normalized-ref-regus) ]
       [])))
 
 (defn process [law-journal-dict inp-fname out-fname]
@@ -105,7 +85,7 @@
              (cc/parse-string true))
           out-data
             (mapcat
-              (partial conv-judgment-to-tag law-journal-dict)
+              (partial conv-raw-to-tag law-journal-dict)
               inp-data)
        ]
     (sc/spit-compr
