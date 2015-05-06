@@ -83,6 +83,14 @@
 (def REF-REGUS-INP-FILES
   (concat APPEA-CHAMB-FILES CONST-TRIBU-FILES SUPRE-COURT-FILES))
 
+(def REF-REGUS-RAW-FILES
+  (map
+     #(conv-fname %
+        "../../get/rest/out/"
+        "../../ref-regus/raws/out/json/"
+        ".json.gz" "_ref_regus_raw.json.gz")
+     REF-REGUS-INP-FILES))
+
 (def REF-REGUS-TAG-FILES
   (map
      #(conv-fname %
