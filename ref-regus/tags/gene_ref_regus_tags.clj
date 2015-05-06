@@ -5,8 +5,8 @@
    '[cheshire.core :as cc]
    '[langlab.core.parsers :as lp]
    '[squeezer.core :as sc]
-   '[saos-tm.extractor.common :as lc]
-   '[saos-tm.extractor.law-links :as ll])
+   '[saos-tm.extractor.common :as ec]
+   '[saos-tm.extractor.law-links :as ell])
 
 (defn read-law-journal-dict [fname]
   (with-open [r (sc/reader-compr fname)]
@@ -23,7 +23,7 @@
 (defn conv-arts-to-str [ arts ]
   (apply str
     (interpose ", "
-      (map lc/convert-art-to-str arts))))
+      (map ec/convert-art-to-str arts))))
 
 (defn clean-up-title [ title ]
   (if (re-matches #".* r.$" title)
@@ -36,7 +36,7 @@
     (let [
            text
              (str (clean-up-title title)
-               " - " (conv-arts-to-str (act-arts-map act)))
+               " - " (conv-arts-to-str (ec/sort-arts (act-arts-map act))))
           ]
       [ (assoc act :title title :text text) ])
     []))
@@ -44,12 +44,16 @@
 (defn normalize-act-arts-pair [ [act arts] ]
   [ act (into [] (distinct arts))])
 
+(defn merge-act-arts-maps
+  ([ m1 m2 ] (merge-with concat m1 m2))
+  ([] {}))
+
 (defn normalize-ref-regus [ law-journal-dict ref-regus-raw ]
   (let [
          ref-regus-raw-act-distinct
            (into [] (distinct (map :act ref-regus-raw)))
          ref-regus-act-arts-map-raw
-           (reduce #(merge-with concat %1 %2)
+           (reduce merge-act-arts-maps
              (map
                #(array-map (:act %) (vector (:art %)))
                ref-regus-raw))
@@ -76,7 +80,7 @@
             (if text
                (try
                  (:extracted-links
-                   (ll/extract-law-links-greedy text true true true))
+                   (ell/extract-law-links-greedy text true true true))
                 (catch Exception e
                   (do
                     (println
