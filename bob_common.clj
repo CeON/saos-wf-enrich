@@ -91,35 +91,5 @@
         ".json.gz" "_ref_regus_tag.json.gz")
      REF-REGUS-INP-FILES))
 
-;; KEYWORDS ISAP
-
 (def LAW-JOURN-DICT-FILE
   "../../ext/law_journal_dict.json.gz")
-
-(def KWDS-ISAP-CC-TAG-FILES
-  (map
-    #(conv-fname %
-       "../../get/rest/out/" "../../kwds-isap/tags-cc/out/json/"
-       ".json.gz"  "_kwds_isap_tag.json.gz")
-  COMMO-COURT-FILES))
-
-(def KWDS-ISAP-OTHER-TAG-FILES
-  (map
-    #(conv-fname %
-       "../../ref-regus/tags/out/json/" "../../kwds-isap/tags-other/out/json/"
-       "_ref_regus_tag.json.gz" "_kwds_isap_tag.json.gz")
-    REF-REGUS-TAG-FILES))
-
-(def KWDS-ISAP-CC-HTML-FILES
-  (map
-    #(conv-fname %
-       "../../kwds-isap/tags-cc/out/json/"  "../../kwds-isap/tags-cc/out/html/"
-       ".json.gz" ".html")
-    KWDS-ISAP-CC-TAG-FILES))
-
-(def KWDS-ISAP-OTHER-HTML-FILES
-  (map
-    #(conv-fname %
-       "../../kwds-isap/tags-other/out/json/" "../../kwds-isap/tags-other/out/html/"
-        ".json.gz" ".html")
-    KWDS-ISAP-OTHER-TAG-FILES))
