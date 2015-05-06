@@ -5,7 +5,6 @@
    '[cheshire.core :as cc]
    '[langlab.core.parsers :as lp]
    '[squeezer.core :as sc]
-   '[saos-tm.extractor.common :as ec]
    '[saos-tm.extractor.law-links :as ell])
 
 (defn read-law-journal-dict [fname]
@@ -23,7 +22,7 @@
 (defn conv-arts-to-str [ arts ]
   (apply str
     (interpose ", "
-      (map ec/convert-art-to-str arts))))
+      (map ell/convert-art-to-str arts))))
 
 (defn clean-up-title [ title ]
   (if (re-matches #".* r.$" title)
@@ -36,7 +35,7 @@
     (let [
            text
              (str (clean-up-title title)
-               " - " (conv-arts-to-str (ec/sort-arts (act-arts-map act))))
+               " - " (conv-arts-to-str (ell/sort-arts (act-arts-map act))))
           ]
       [ (assoc act :title title :text text) ])
     []))

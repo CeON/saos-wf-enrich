@@ -5,7 +5,6 @@
    '[cheshire.core :as cc]
    '[langlab.core.parsers :as lp]
    '[squeezer.core :as sc]
-   '[saos-tm.extractor.common :as lc]
    '[saos-tm.extractor.law-links :as ell])
 
 (defn conv-judgment-to-tag [j]
