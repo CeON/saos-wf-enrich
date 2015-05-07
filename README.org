@@ -1,0 +1,8 @@
+* saos-wf-enrich
+  Prototype enrichment workflow for SAOS system
+
+** Installation
+   + Install Oracle Java 7+
+   + Install lein2
+   + Fill credentials in file ~put/rest/auto~ in form of ~user:pass~
+   + Run top level ~bld.sh~ script
