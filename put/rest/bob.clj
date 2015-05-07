@@ -9,4 +9,5 @@
     (inp REF-CASES-TAG-FILES)
     (inp CAS-PTIES-TAG-FILES)
     (inp REF-MONEY-TAG-FILES)
+    (inp REF-REGUS-TAG-FILES)
     ">" (out "out/put_json.log") ])

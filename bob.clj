@@ -6,5 +6,5 @@
      "ref-cases"
      "cas-pties"
      "ref-money"
-     "ref-requs"
+     "ref-regus"
      "put"))
