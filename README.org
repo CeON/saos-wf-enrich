@@ -6,3 +6,4 @@
    + Install lein2
    + Fill credentials in file ~put/rest/auto~ in form of ~user:pass~
    + Run top level ~bld.sh~ script
+   + Copy ~law_journal_dict.json.gz~ to ~ext~ directory
