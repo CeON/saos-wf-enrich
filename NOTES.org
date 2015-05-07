@@ -15,6 +15,16 @@
      judgmentID: Integer
      tagType: String
      vallue: String
+* Tag-specific issues
+** Referenced money:
+   + Judgment with tables breaking money extraction
+     https://saos-test.icm.edu.pl/judgments/28320
+** Referenced regulations
+   + Validator for ~art~ #"[0-9]+[a-z]?"
+   + Validator for ~ust~ #"[0-9]+[a-z]?"
+   + Validator for ~par~ #"[0-9]+[a-z]?"
+   + Validator for ~pkt~ #"[0-9]+[a-z]?", sometimes only letter
+   +
 * Common Courts terminology
   + Sąd apelacyjny = Appeal court
   + Sąd okręgowy = Regional court
