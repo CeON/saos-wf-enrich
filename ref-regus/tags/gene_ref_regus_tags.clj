@@ -34,10 +34,12 @@
               (get-ref-regu-title law-journal-dict act) ]
     (let [
            text
-             (str (clean-up-title title)
-               " - " (conv-arts-to-str (ell/sort-arts (act-arts-map act))))
+             (str
+               (clean-up-title title)
+               " (" (ell/conv-act-to-str act)
+               " - " (conv-arts-to-str (ell/sort-arts (act-arts-map act))) ")" )
           ]
-      [ (assoc act :title title :text text) ])
+      [ (assoc act :journalTitle title :text text) ])
     []))
 
 (defn normalize-act-arts-pair [ [act arts] ]
