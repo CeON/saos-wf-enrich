@@ -29,7 +29,7 @@
                 [])
           ]
     (if-not (empty? ref-regus-raw)
-      [ { :id id
+      [ { :judgmentId id
           :tagType "REF_REGUS"
           :value ref-regus-raw } ]
       [])))
