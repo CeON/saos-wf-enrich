@@ -1,6 +1,6 @@
 #!/bin/bash
 
 cd TOOLS/bob
-lein uberjar
+lein do clean, uberjar
 cd ../clj/
 ./bld.sh
