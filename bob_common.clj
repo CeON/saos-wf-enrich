@@ -3,6 +3,11 @@
 
 (def MOD-PATH "../../")
 
+; TOOLS
+
+(def CLJ-CMD (str MOD-PATH "TOOLS/clj/sbin/clj"))
+(def CLQ-CMD (str MOD-PATH "TOOLS/clj/sbin/clq"))
+
 ; GLOBAL FUNCTION DEFINITIONS
 
 (defn conv-fname [ fname old-prefix new-prefix old-suffix new-suffix ]
@@ -19,31 +24,48 @@
   (apply (partial map gen-rule-f)
     (map (partial partition-all n) file-lists)))
 
-; TOOLS
+(defn gen-stat-rules [court-type inp-q-script inp-files out-dir out-suffix]
+  (let [
+         court-type-re
+           (if (= court-type "every_court")
+             #".*"
+             (re-pattern (str "^" court-type)))
+         inp-files-selected
+           (filter-files court-type-re inp-files)
+         out-file
+           (str out-dir "/" court-type out-suffix)
+        ]
+    [ [ (file CLQ-CMD) "-p1" (inp inp-q-script) (inp inp-files-selected)
+          ">" (out out-file) ]]))
 
-(def CLJ-CMD (str MOD-PATH "TOOLS/clj/sbin/clj"))
-(def CLQ-CMD (str MOD-PATH "TOOLS/clj/sbin/clq"))
+(defn sort* [ coll ]  (sort coll))
 
-(def GEN-KWDS-ISAP-HTML-CLJ "../../TOOLS/aux/gene_kwds_isap_html.clj")
-
-; INPUT FILES
-
-(def EVERY-COURT-FILES
-  (sort
-    (ls-cur-dir-with-path
-      (str MOD-PATH "get/rest/out") #".*json.gz")))
+; (defn sort* [ coll ]
+;  (take 2 (sort coll)))
 
 (def APPEA-CHAMB-FILES
-  (filter-files #"^appea_chamb" EVERY-COURT-FILES))
+  (sort*
+    (ls-cur-dir-with-path
+      (str MOD-PATH "get/rest/out") #"^appea_chamb.*json.gz")))
 
 (def COMMO-COURT-FILES
-  (filter-files #"^commo_court" EVERY-COURT-FILES))
+  (sort*
+    (ls-cur-dir-with-path
+      (str MOD-PATH "get/rest/out") #"^commo_court.*json.gz")))
 
 (def CONST-TRIBU-FILES
-  (filter-files #"^const_tribu" EVERY-COURT-FILES))
+  (sort*
+    (ls-cur-dir-with-path
+      (str MOD-PATH "get/rest/out") #"^const_tribu.*json.gz")))
 
 (def SUPRE-COURT-FILES
-  (filter-files #"^supre_court" EVERY-COURT-FILES))
+  (sort*
+    (ls-cur-dir-with-path
+      (str MOD-PATH "get/rest/out") #"^supre_court.*json.gz")))
+
+(def EVERY-COURT-FILES
+  (concat APPEA-CHAMB-FILES COMMO-COURT-FILES
+          CONST-TRIBU-FILES SUPRE-COURT-FILES))
 
 ; OUTPUT FILES
 
@@ -67,7 +89,6 @@
         "../../get/rest/out/" "../../cas-pties/tags/out/json/"
         ".json.gz" "_cas_pties_tag.json.gz")
     COMMO-COURT-FILES))
-
 
 ;; REFerenced MONEY
 
