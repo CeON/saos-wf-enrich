@@ -18,8 +18,7 @@
       (do
         (.write w "]")
         (.close w)
-        (put/get-response conn)
-        {:code 200})
+        (put/get-response conn))
       (let [
              tags
                (->> (first fnames)
