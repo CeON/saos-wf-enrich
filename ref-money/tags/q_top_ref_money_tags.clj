@@ -40,9 +40,11 @@
 
 {
    :transform-f
-      (partial get-top-n TOP-N [])
-    :merge-f
-      (partial get-top-n TOP-N)
-    :print-f
-      print-json
+     (fn [ tags ]
+        (get-top-n TOP-N []
+          (filter #(:value %) tags)))
+   :merge-f
+     (partial get-top-n TOP-N)
+   :print-f
+     print-json
 }
