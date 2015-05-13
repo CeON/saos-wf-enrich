@@ -25,6 +25,7 @@
          (gen-stat-rules* % "./q_ref_cases_stat_frq.clj" "_frq.txt")
          (gen-stat-rules* % "./q_ref_cases_stat_frq_unresolved.clj"
             "_frq_unresolved.txt")
-         (gen-stat-rules* % "./q_ref_cases_stat_ids.clj" "_ids.txt"))
+         (gen-stat-rules* % "./q_ref_cases_stat_ids.clj" "_ids.txt")
+         (gen-stat-rules* % "./q_ref_cases_stat_num_frq.clj" "_num_frq.txt"))
          [ "every_court" "commo_court" "supre_court"
            "const_tribu" "appea_chamb" ])))
