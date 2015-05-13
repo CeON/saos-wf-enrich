@@ -11,8 +11,11 @@
     (out tag-files) ])
 
 (defn gen-stat-rules* [ court-type ]
-  (gen-stat-rules court-type "./q_top_ref_money_tags.clj"
-    REF-MONEY-TAG-FILES "out/stat" "_top_ref_money.json"))
+  (concat
+    (gen-stat-rules court-type "./q_top_ref_money_tags.clj"
+      REF-MONEY-TAG-FILES "out/stat" "_top_ref_money.json")
+    (gen-stat-rules court-type "./q_ref_money_tags_sum.clj"
+      REF-MONEY-TAG-FILES "out/stat" "_sum.txt")))
 
 (defrule
   (concat
@@ -20,4 +23,5 @@
        EVERY-COURT-FILES REF-MONEY-TAG-FILES)
     (mapcat gen-stat-rules*
       [ "every_court" "commo_court" "supre_court"
-        "const_tribu" "appea_chamb" ])))
+        "const_tribu" "appea_chamb" ])
+    []))

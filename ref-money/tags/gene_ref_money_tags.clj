@@ -29,11 +29,9 @@
                    (format "ERROR, extracting money for id=%d" id))
                  nil)))
        ]
-    (if max-money-ref
-      [ { :judgmentId id
-          :tagType "MAX_REFERENCED_MONEY"
-          :value max-money-ref } ]
-      [])))
+     { :judgmentId id
+       :tagType "MAX_REFERENCED_MONEY"
+       :value max-money-ref }))
 
 (defn process [inp-fname out-fname]
   (let [
@@ -42,7 +40,7 @@
              sc/slurp-compr
              (cc/parse-string true))
           out-data
-            (mapcat
+            (map
               conv-judgment-to-tag
               inp-data)
        ]

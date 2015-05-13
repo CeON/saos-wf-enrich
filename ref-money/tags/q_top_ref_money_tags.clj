@@ -13,7 +13,6 @@
 ;; Complicated because it has to glue the results in case of tie
 ;; at the end of a list
 
-
 (defn get-top-n [ top-n l1 l2 ]
   (let [
           merged-lists
@@ -28,7 +27,6 @@
                0)
         ]
      (filter #(>= (get-max-money %) top-value) sorted-lists)))
-
 
 (defn print-val-asc [ hist ]
   (let [
