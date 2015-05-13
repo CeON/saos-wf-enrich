@@ -18,13 +18,16 @@
        "out/stat" "_journ_frq.txt")
     (gen-stat-rules court-type
        "./q_ref_regus_stat_texts_frq.clj" REF-REGUS-TAG-FILES
-       "out/stat" "_texts_frq.txt")))
+       "out/stat" "_texts_frq.txt")
+    (gen-stat-rules court-type
+       "./q_ref_regus_stat_sum.clj" REF-REGUS-TAG-FILES
+       "out/stat" "_sum.txt")))
 
 (defrule
   (concat
     (gen-partitioned-rules N gen-ref-regus-rule
       REF-REGUS-RAW-FILES REF-REGUS-TAG-FILES)
     (mapcat
-       gen-stat-rules*
-       [ "every_court" "supre_court"
-         "const_tribu" "appea_chamb" ])))
+      gen-stat-rules*
+      [ "every_court" "supre_court"
+        "const_tribu" "appea_chamb" ])))

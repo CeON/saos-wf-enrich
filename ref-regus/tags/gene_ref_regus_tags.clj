@@ -75,19 +75,19 @@
              (normalize-ref-regus law-journal-dict (:value raw-tag))
           ]
     (if-not (empty? normalized-ref-regus)
-      [ (assoc raw-tag :value normalized-ref-regus) ]
-      [])))
+      (assoc raw-tag :value normalized-ref-regus)
+      (assoc raw-tag :value nil))))
 
 (defn process [law-journal-dict inp-fname out-fname]
   (let [
-        inp-data
-           (-> inp-fname
-             sc/slurp-compr
-             (cc/parse-string true))
-          out-data
-            (mapcat
-              (partial conv-raw-to-tag law-journal-dict)
-              inp-data)
+         inp-data
+          (-> inp-fname
+            sc/slurp-compr
+            (cc/parse-string true))
+         out-data
+          (map
+            (partial conv-raw-to-tag law-journal-dict)
+            inp-data)
        ]
     (sc/spit-compr
       out-fname

@@ -10,6 +10,16 @@
     (inp judgment-files)
     (out tag-files) ])
 
+(defn gen-stat-rules* [ court-type ]
+  (gen-stat-rules court-type
+    "./q_ref_regus_stat_sum.clj" REF-REGUS-RAW-FILES
+    "out/stat" "_sum.txt"))
+
 (defrule
-  (gen-partitioned-rules N gen-ref-regus-rule
-    REF-REGUS-INP-FILES REF-REGUS-RAW-FILES))
+  (concat
+    (gen-partitioned-rules N gen-ref-regus-rule
+      REF-REGUS-INP-FILES REF-REGUS-RAW-FILES)
+    (mapcat
+      gen-stat-rules*
+      [ "every_court" "supre_court"
+        "const_tribu" "appea_chamb" ])))

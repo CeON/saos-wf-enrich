@@ -25,14 +25,15 @@
                     (println
                       (format
                         "ERROR, extracting referenced regulations for id=%d failed" id))
-                    [])))
-                [])
+                    nil)))
+                nil)
           ]
-    (if-not (empty? ref-regus-raw)
-      [ { :judgmentId id
-          :tagType "REF_REGUS"
-          :value ref-regus-raw } ]
-      [])))
+    { :judgmentId id
+      :tagType "REF_REGUS"
+      :value
+        (if-not (empty? ref-regus-raw)
+          ref-regus-raw
+          nil)}))
 
 (defn process [inp-fname out-fname]
   (let [
@@ -41,7 +42,7 @@
              sc/slurp-compr
              (cc/parse-string true))
           out-data
-            (mapcat
+            (map
               conv-judgment-to-tag
               inp-data)
        ]
