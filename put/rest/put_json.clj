@@ -1,45 +1,40 @@
 (require '[clojure.string :as str])
-(require '[clojure.pprint :as pp])
 (require '[cheshire.core :as cc])
-(require '[squeezer.core :as sc])
 (require '[clj.rest-put :as put])
+(require '[clj.common :as com])
 
-(defn strip-string-from-parentheses [ ^String s ]
-  (let [
-         start-index
-           (.indexOf s "[")
-         stop-index
-           (.lastIndexOf s "]")
-       ]
-    (if (and
-          (>= stop-index 0)
-          (>= start-index 0)
-          (< start-index stop-index))
-      (.substring s (inc start-index) stop-index)
-      s)))
+(defn has-non-empty-value? [ tag ]
+  (not (nil? (:value tag))))
 
-(defn read-file-content [ fname ]
-  (strip-string-from-parentheses
-    (sc/slurp-compr fname)))
-
-(defn put-data-files [ url user-colon-pass fnames ]
-  (let [
-         data-seq
-           (interpose ","
-             (filter (complement str/blank?)
-               (map read-file-content fnames)))
-         data-seq-with-parens
-           (concat [ "[" ] data-seq [ "]" ])
-         conn (put/create-url-conn url user-colon-pass)
-         w (put/get-conn-stream conn)
-         write-chunk-f
-           #(do (.write w %) (.flush w))
-         _
-           (dorun
-             (map write-chunk-f data-seq-with-parens))
-         _ (.close w)
-      ]
-    (put/get-response conn)))
+(defn put-data-files [ url user-colon-pass fnames* ]
+  (loop [
+          conn (put/create-url-conn url user-colon-pass)
+          w (put/get-conn-stream conn)
+          fnames fnames*
+          print-coma? false
+          _ (.write w "[")
+        ]
+    (if  (empty? fnames)
+      (do
+        (.write w "]")
+        (.close w)
+        (put/get-response conn)
+        {:code 200})
+      (let [
+             tags
+               (->> (first fnames)
+                 com/read-json
+                 (filter has-non-empty-value?)
+                 (map cc/generate-string)
+                 (interpose ","))
+              _
+               (when (and print-coma? (seq tags))
+                 (.write w ","))
+              _ (.write w (apply str tags))
+              print-coma?*
+                (or print-coma? (seq tags))
+            ]
+      (recur conn w (rest fnames) print-coma?* nil)))))
 
 (defn run [ argv ]
   (let [
