@@ -20,11 +20,15 @@
    + Judgment with tables breaking money extraction
      https://saos-test.icm.edu.pl/judgments/28320
 ** Referenced regulations
-   + Validator for ~art~ #"[0-9]+[a-z]?"
-   + Validator for ~ust~ #"[0-9]+[a-z]?"
-   + Validator for ~par~ #"[0-9]+[a-z]?"
-   + Validator for ~pkt~ #"[0-9]+[a-z]?", sometimes only letter
-   +
+*** Validators for act
+    + Validator for ~art~ #"[0-9]+[a-z]?"
+    + Validator for ~ust~ #"[0-9]+[a-z]?"
+    + Validator for ~par~ #"[0-9]+[a-z]?"
+    + Validator for ~pkt~ #"[0-9]+[a-z]?", sometimes only letter
+*** Quality issues
+    + Some of the tags have journalYear = null or journalEntry = null
+    + For sure if there is art instead of art., no article part is extracted
+
 * Common Courts terminology
   + Sąd apelacyjny = Appeal court
   + Sąd okręgowy = Regional court
