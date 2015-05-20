@@ -29,7 +29,7 @@
                 nil)
           ]
     { :judgmentId id
-      :tagType "REF_REGUS"
+      :tagType "REFERENCED_REGULATIONS"
       :value
         (if-not (empty? ref-regus-raw)
           ref-regus-raw
