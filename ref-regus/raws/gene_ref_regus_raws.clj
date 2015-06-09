@@ -5,7 +5,8 @@
    '[cheshire.core :as cc]
    '[langlab.core.parsers :as lp]
    '[squeezer.core :as sc]
-   '[saos-tm.extractor.law-links :as ell])
+   '[saos-tm.extractor.law-links :as ell]
+   '[clj.common :as cljc])
 
 (defn conv-judgment-to-tag [j]
   (let [
@@ -46,9 +47,7 @@
               conv-judgment-to-tag
               inp-data)
        ]
-    (sc/spit-compr
-      out-fname
-      (cc/generate-string out-data {:pretty true}))))
+    (cljc/write-json out-fname out-data)))
 
 (defn run [argv]
   (let [

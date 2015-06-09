@@ -81,9 +81,7 @@
               (partial conv-judgment-to-tag case-number->ids)
               inp-data)
        ]
-    (sc/spit-compr
-      out-fname
-      (cc/generate-string out-data {:pretty true}))))
+  (cljc/write-json out-fname out-data)))
 
 (defn run [argv]
   (let [
