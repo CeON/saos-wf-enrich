@@ -25,7 +25,7 @@
 
     [byte-streams "0.2.0-alpha3"] ;; converter between bytes
     [com.taoensso/nippy "2.7.1"] ;; serializer
-    [factual/riffle "0.1.2"] ;; filesystem k/v store
+    [factual/riffle "0.1.3"] ;; filesystem k/v store
 
     [squeezer "0.1.0"] ;; utilities for compressed files
     [langlab "1.2.0"]  ;; language utilities
