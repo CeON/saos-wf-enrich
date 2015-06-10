@@ -4,6 +4,10 @@
 ** Installation
    + Install Oracle Java 7+
    + Install lein2
-   + Fill credentials in file ~put/rest/auto~ in form of ~user:pass~
    + Run top level ~bld.sh~ script
    + Copy ~law_journal_dict.json.gz~ to ~ext~ directory
+   + Prepare ~config~ file based on template
+     #+BEGIN_SRC sh
+     > cp config.example config
+     #+END_SRC
+     Edit ~config~, providing put and get URLs +  authorization credentials

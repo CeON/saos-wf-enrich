@@ -1,0 +1,11 @@
+# URL for getting data
+getURL=https://get.url.goes.here
+
+# URL for putting results
+putURL=https://put.url.goes.here
+
+# Authorization token for putting results
+putAuth=user:pass
+
+# Number of processes launched by enricher
+numProc=1
