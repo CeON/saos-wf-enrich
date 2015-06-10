@@ -16,9 +16,6 @@ cd ${START_DIR}
 numProc=1
 eval `grep -e "^\s*numProc" config`
 
-echo ${numProc}
-exit 0
-
 rm -f bob.log get.log
 
 cd get/rest
