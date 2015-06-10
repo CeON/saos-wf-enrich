@@ -37,11 +37,11 @@
 
 (defn run [ argv ]
   (let [
-         user-colon-pass (str/trim (slurp (first argv)))
+         { :keys [ putAuth putURL ] }
+           (com/read-properties (first argv))
          argv* (rest argv)
-         url "https://saos-test.icm.edu.pl/api/enrichment/tags"
          response
-           (put-data-files url user-colon-pass argv*)
+           (put-data-files putURL putAuth argv*)
          _
            (println response)
        ]

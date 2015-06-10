@@ -1,5 +1,7 @@
 (ns clj.common
   (require
+    [clojure.java.io :as io]
+    [clojurewerkz.propertied.properties :as p]
     [cheshire.core :as cc]
     [squeezer.core :as sc]))
 
@@ -15,6 +17,11 @@
   (sc/spit-compr
     fname
     (cc/generate-string data {:pretty true})))
+
+(defn read-properties [ fname ]
+  (p/properties->map
+    (p/load-from (io/file fname))
+    true))
 
 (defn println-err [ & args ]
   (dorun

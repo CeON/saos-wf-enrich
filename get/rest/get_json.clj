@@ -31,20 +31,24 @@
     "CONSTITUTIONAL_TRIBUNAL" "out/const_tribu_%04d.json.gz"
     "NATIONAL_APPEAL_CHAMBER" "out/appea_chamb_%04d.json.gz"})
 
-(defn run []
+(defn run [ argv ]
   (let [
+         { :keys [ getURL ] }
+           (com/read-properties (first argv))
          division-id->cc-division
-           (get/fetch-common-court-divisions SAOS-API-DUMP-URL)
+           (get/fetch-common-court-divisions getURL)
          [division-id->sc-division chamber-id->sc-chamber]
-           (get/fetch-supreme-court-divisions SAOS-API-DUMP-URL)
+           (get/fetch-supreme-court-divisions getURL)
          transform-f
            (create-expand-id-function
              division-id->cc-division division-id->sc-division chamber-id->sc-chamber)
         ]
   (get/fetch-buffer-all
-    (str SAOS-API-DUMP-URL
+    (str getURL
        "judgments?pageSize=100&pageNumber=0&withGenerated=false")
     court-type->out-fname-format
     transform-f)))
 
-(run)
+(when (> (count *command-line-args*) 0)
+  (System/exit
+   (run  *command-line-args*)))

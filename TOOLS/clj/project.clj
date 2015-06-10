@@ -30,6 +30,7 @@
     [squeezer "0.1.0"] ;; utilities for compressed files
     [langlab "1.2.0"]  ;; language utilities
     [paralab "0.1.0"]  ;; parallel programming tools
+    [clojurewerkz/propertied "1.2.0"]
 
 ;; Following dependencies are added via checkouts
     [saos-tm.extractor "0.2.0-SNAPSHOT"]
