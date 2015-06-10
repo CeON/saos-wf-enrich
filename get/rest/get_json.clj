@@ -51,5 +51,4 @@
     transform-f)))
 
 (when (> (count *command-line-args*) 0)
-  (System/exit
-   (run  *command-line-args*)))
+  (run  *command-line-args*))
