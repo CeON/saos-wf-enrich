@@ -5,7 +5,7 @@
 (defrule
   [ (file CLJ-CMD)
     (inp "./put_json.clj")
-    (inp "./../../config")
+    (inp "../../config")
     (inp REF-CASES-TAG-FILES)
     (inp CAS-PTIES-TAG-FILES)
     (inp REF-MONEY-TAG-FILES)

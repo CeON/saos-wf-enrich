@@ -1,5 +1,6 @@
 (require '[cheshire.core :as cc])
 (require '[clj.rest-get :as get])
+(require '[clj.common :as cljc])
 
 (def SAOS-API-DUMP-URL "https://saos-test.icm.edu.pl/api/dump/")
 
@@ -34,7 +35,7 @@
 (defn run [ argv ]
   (let [
          { :keys [ getURL ] }
-           (com/read-properties (first argv))
+           (cljc/read-properties (first argv))
          division-id->cc-division
            (get/fetch-common-court-divisions getURL)
          [division-id->sc-division chamber-id->sc-chamber]

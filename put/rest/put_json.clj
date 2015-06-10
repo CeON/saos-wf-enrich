@@ -1,7 +1,7 @@
 (require '[clojure.string :as str])
 (require '[cheshire.core :as cc])
 (require '[clj.rest-put :as put])
-(require '[clj.common :as com])
+(require '[clj.common :as cljc])
 
 (defn has-non-empty-value? [ tag ]
   (not (nil? (:value tag))))
@@ -22,7 +22,7 @@
       (let [
              tags
                (->> (first fnames)
-                 com/read-json
+                 cljc/read-json
                  (filter has-non-empty-value?)
                  (map cc/generate-string)
                  (interpose ","))
@@ -38,7 +38,7 @@
 (defn run [ argv ]
   (let [
          { :keys [ putAuth putURL ] }
-           (com/read-properties (first argv))
+           (cljc/read-properties (first argv))
          argv* (rest argv)
          response
            (put-data-files putURL putAuth argv*)
