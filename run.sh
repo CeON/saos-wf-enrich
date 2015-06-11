@@ -2,6 +2,9 @@
 
 CONFIG_FILE=config
 
+START_DIR=$(dirname $0)
+cd ${START_DIR}
+
 if [ ! -f config ]; then
     echo "[LOG] Failed reading parameters file \"config\". Exiting..."
     exit 1
@@ -9,10 +12,6 @@ fi
 
 date +"[LOG] %Y-%m-%d %H:%M Started analysis."
 
-START_DIR=$(dirname $0)
-cd ${START_DIR}
-
-# This defines numProc variable
 numProc=1
 eval `grep -e "^\s*numProc" ${CONFIG_FILE}`
 
