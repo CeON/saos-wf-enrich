@@ -32,23 +32,37 @@
     "CONSTITUTIONAL_TRIBUNAL" "out/const_tribu_%04d.json.gz"
     "NATIONAL_APPEAL_CHAMBER" "out/appea_chamb_%04d.json.gz"})
 
+(defn report-error [ error ]
+  (when error
+    (println (str "Error - " error))))
+
 (defn run [ argv ]
   (let [
          { :keys [ getURL ] }
            (cljc/read-properties (first argv))
-         division-id->cc-division
+         [ division-id->cc-division error-common-court-divs ]
            (get/fetch-common-court-divisions getURL)
-         [division-id->sc-division chamber-id->sc-chamber]
+	 _ (report-error error-common-court-divs)
+         [division-id->sc-division chamber-id->sc-chamber error-supreme-court-divs]
            (get/fetch-supreme-court-divisions getURL)
+         _ (report-error error-supreme-court-divs)
          transform-f
            (create-expand-id-function
              division-id->cc-division division-id->sc-division chamber-id->sc-chamber)
+         error
+	   (if-not (or error-common-court-divs error-supreme-court-divs)
+             (get/fetch-buffer-all
+                (str getURL
+                  "judgments?pageSize=100&pageNumber=0&withGenerated=false")
+                  court-type->out-fname-format
+                  transform-f)
+	     (println "Skipping fetching phase because of the previous errors."))
+         _ (report-error error)
         ]
-  (get/fetch-buffer-all
-    (str getURL
-       "judgments?pageSize=100&pageNumber=0&withGenerated=false")
-    court-type->out-fname-format
-    transform-f)))
+    (if-not (or error-common-court-divs error-supreme-court-divs error)
+      0
+      1)))
 
 (when (> (count *command-line-args*) 0)
-  (run  *command-line-args*))
+  (System/exit
+   (run  *command-line-args*)))

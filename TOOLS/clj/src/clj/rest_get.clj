@@ -136,19 +136,19 @@
 
 (defn ^:private handle-buffer [ transform-item-f [buffer url error] ]
   (let [
-          [items url-next error]
+          [items url-next error-next]
             (fetch-items url)
           items*
             (map transform-item-f items)
            buffer*
-             (if (and url-next (not error))
+             (if (and url-next (not error-next))
                (save-buffer-overhead
                  (update-buffer buffer items*))
                (save-buffer-rest
                  (save-buffer-overhead
                    (update-buffer buffer items*))))
         ]
-   [ buffer* url-next error ]))
+   [ buffer* url-next error-next ]))
 
 (defn fetch-buffer-all
   ([ url court-type->out-fname-format ]
@@ -159,13 +159,13 @@
             (create-empty-buffer court-type->out-fname-format)
            handle-buffer-f
             (partial handle-buffer transform-f)
-
+           [buffer url-next error]
+	     (first
+               (drop-while
+                 is-there-more?
+                 (iterate handle-buffer-f [ empty-buffer url nil ])))
          ]
-    (last
-      (take-while
-        is-there-more?
-        (iterate handle-buffer-f [ empty-buffer url nil ])))
-    nil)))
+	error)))
 
 ; Logic for fetching divisions and chambers names
 
@@ -189,12 +189,13 @@
 
 (defn fetch-common-court-divisions [ saos-api-dump-url ]
   (let [
-         common-courts
-           (first
-             (fetch-items-all
-               (str saos-api-dump-url "commonCourts?pageSize=100&pageNumber=0")))
+         [ common-courts url error]
+           (fetch-items-all
+             (str saos-api-dump-url "commonCourts?pageSize=100&pageNumber=0"))
         ]
-    (gen-division-id->cc-division-map common-courts)))
+    (if-not error
+      [ (gen-division-id->cc-division-map common-courts) nil]
+      [ {} error ])))
 
 ;; Supreme Courts
 
@@ -225,12 +226,12 @@
 
 (defn fetch-supreme-court-divisions [ saos-api-dump-url ]
   (let [
-         supreme-court-chambers
-           (first
-             (fetch-items-all
-               (str saos-api-dump-url
-                 "scChambers?pageSize=100&pageNumber=0")))
-
+         [supreme-court-chambers url error ]
+           (fetch-items-all
+             (str saos-api-dump-url
+               "scChambers?pageSize=100&pageNumber=0"))
         ]
-    [ (gen-division-id->sc-division-map supreme-court-chambers)
-      (gen-chamber-id->sc-chamber-map supreme-court-chambers) ]))
+    (if-not error
+      [ (gen-division-id->sc-division-map supreme-court-chambers)
+        (gen-chamber-id->sc-chamber-map supreme-court-chambers) nil]
+      [  {} {} error])))
