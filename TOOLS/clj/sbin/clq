@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JVM_OPTS="-Xmx2g -Djava.net.preferIPv6Addresses=true"
+JVM_OPTS="-Xmx2g ${JVM_OPTS}"
 
 BREAKCHARS="(){}[],^%$#@\"\";:''|\\"
 
