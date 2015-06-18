@@ -48,3 +48,7 @@
   + Internal test server
     http://192.168.28.232:8080/saos-webapp/api/enrichment/tags
     pass=pass, user the same as in production
+* Problems with SNI
+  + It should work when the stuff below will give the same
+    > openssl s_client -connect www.saos.org.pl:443 -servername www.saos.org.pl | grep subject
+    > s_client -connect www.saos.org.pl:443  -servername saos.org.pl | grep subject

@@ -1,4 +1,5 @@
 .nrepl-port
+.idea
 */*/out*
 /put/rest/auto
 exp
