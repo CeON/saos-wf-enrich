@@ -2,8 +2,6 @@
 
 JVM_OPTS="-Xmx2g ${JVM_OPTS}"
 
-echo ${JVM_OPTS}
-
 BREAKCHARS="(){}[],^%$#@\"\";:''|\\"
 
 START_DIR=`dirname $0`
