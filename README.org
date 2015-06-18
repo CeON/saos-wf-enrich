@@ -15,3 +15,26 @@
      cp config.example config
      #+END_SRC
      Edit ~config~, providing put and get URLs +  authorization credentials
+
+** Running
+   Enricher comes with three scripts:
+
+   + run.sh :: the main entry point for running analysis and putting results
+     back. For periodic updates of enrichment tags, add it to crontab
+
+   + get.sh :: Download the data via REST (do not process them)
+
+   + put.sh :: Put the calculated data to the server (useful if you want to
+     resend existing data)
+
+** Troubleshooting
+*** How do I run the enricher on the machine with IPv6?
+
+    Set the environment variable ~JVM_OPTS~ to the following value
+    #+BEGIN_SRC sh
+    JVM_OPTS="-Djava.net.preferIPv6Addresses=true"
+    #+END_SRC
+
+* License
+
+  Distributed under the Eclipse Public License, the same as Clojure.
