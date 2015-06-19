@@ -21,6 +21,9 @@
 
    + run.sh :: the main entry point for running analysis and putting results
      back. For periodic updates of enrichment tags, add it to crontab
+     The results are logged to two files:
+     +  get.log :: log for downloading data via REST
+     +  bob.log :: log for processing data
 
    + get.sh :: Download the data via REST (do not process them)
 
