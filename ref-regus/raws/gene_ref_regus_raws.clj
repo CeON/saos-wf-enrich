@@ -23,7 +23,7 @@
                     (ell/extract-law-links text true true true))
                 (catch Exception e
                   (do
-                    (println
+                    (cljc/println-err
                       (format
                         "ERROR, extracting referenced regulations for id=%d failed" id))
                     nil)))
