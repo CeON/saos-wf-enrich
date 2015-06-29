@@ -85,7 +85,9 @@
                {})
           ]
     (if (empty? parties)
-      []
+      [{ :judgmentId id
+          :tagType "PARTIES"
+          :value nil }]
       [ { :judgmentId id
           :tagType "PARTIES"
           :value (clean-parties parties)} ]))))
