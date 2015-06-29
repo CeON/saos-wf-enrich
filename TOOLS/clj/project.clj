@@ -33,7 +33,7 @@
     [clojurewerkz/propertied "1.2.0"]
 
 ;; Following dependencies are added via checkouts
-    [saos-tm.extractor "0.2.0-SNAPSHOT"]
+    [saos-tm.extractor "1.0.0"]
   ]
 
   ; PLUGINS + CONFIGURATION
