@@ -76,8 +76,8 @@
              (if include-judgment?
                (try
                  (if (= "Karny" (get-in j [:division :type]))
-                   (pt/extract-parties-cc-criminal (:textContent j))
-                   (pt/extract-parties-cc-civil (:textContent j)))
+                   (pt/extract-cc-parties-criminal (:textContent j))
+                   (pt/extract-cc-parties-civil (:textContent j)))
                  (catch Exception e
                    (cljc/println-err
                      (format "ERROR, extracting parties for id=%d failed" id))

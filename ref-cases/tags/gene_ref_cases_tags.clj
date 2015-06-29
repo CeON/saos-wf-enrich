@@ -46,7 +46,7 @@
 
          dirty-referenced-case-numbers
            (try
-             (jl/extract-all-signatures text)
+             (jl/extract-judgment-links text)
              (catch Exception e
                (cljc/println-err
                  (format "ERROR, extracting singnatres for id=%d failed" id))

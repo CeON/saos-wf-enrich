@@ -20,7 +20,7 @@
             (if text
                (try
                  (:extracted-links
-                    (ell/extract-law-links-greedy text true true true))
+                    (ell/extract-law-links text true true true))
                 (catch Exception e
                   (do
                     (println

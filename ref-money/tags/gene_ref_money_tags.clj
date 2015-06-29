@@ -2,7 +2,7 @@
    '[cheshire.core :as cc]
    '[squeezer.core :as sc]
    '[saos-tm.extractor.common :as jc]
-   '[saos-tm.extractor.ref-money :as e]
+   '[saos-tm.extractor.money :as e]
    '[clj.common :as cljc])
 
 (defn conv-judgment-to-tag [j]
@@ -22,7 +22,7 @@
              (:textContent j))
          max-money-ref
            (try
-             (e/extract-max-money-ref text)
+             (e/extract-max-money text)
              (catch Throwable e
                (do
                  (cljc/println-err
