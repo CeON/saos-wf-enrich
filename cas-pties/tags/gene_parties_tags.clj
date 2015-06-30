@@ -51,14 +51,12 @@
 
 (defn clean-map-entry [ [k v] ]
   (if v
-    [[k (strip-anon v)]]
-    []))
+    [k (strip-anon v)]
+    [k v]))
 
 (defn clean-parties [ m ]
-  (if m
-    (into {}
-      (mapcat clean-map-entry m))
-    {}))
+  (into {}
+    (map clean-map-entry m)))
 
 (defn conv-judgment-to-tag [j]
   (if-not (= (:judgmentType j) "SENTENCE")
