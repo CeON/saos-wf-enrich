@@ -6,19 +6,19 @@
 
 (def Q-FILES
   [ "q_defendant_frq.clj"
-    "q_defendant_tot.clj"
+    "q_defendant_sum.clj"
     "q_plaintiff_frq.clj"
-    "q_plaintiff_tot.clj"
+    "q_plaintiff_sum.clj"
     "q_prosecutor_frq.clj"
-    "q_prosecutor_tot.clj" ])
+    "q_prosecutor_sum.clj" ])
 
 (def ANS-FILES
   [ "out/stat/defendant_frq.txt"
-    "out/stat/defendant_tot.txt"
+    "out/stat/defendant_sum.txt"
     "out/stat/plaintiff_frq.txt"
-    "out/stat/plaintiff_tot.txt"
+    "out/stat/plaintiff_sum.txt"
     "out/stat/prosecutor_frq.txt"
-    "out/stat/prosecutor_tot.txt" ])
+    "out/stat/prosecutor_sum.txt" ])
 
 (defn gen-query-rule [ query-file ans-file]
   [ (file CLQ-CMD)

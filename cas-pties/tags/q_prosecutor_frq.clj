@@ -2,9 +2,12 @@
 
 {
    :transform-f
-     (fn [t]
-       (frequencies
-         (keep #(get-in % [:value :prosecutor]) t)))
+     (fn [tags]
+       (->> tags
+         (filter #(not (nil? (:value %))))
+         (filter #(contains? (:value %) :prosecutor))
+         (map #(get-in % [:value :prosecutor]))
+         frequencies))
    :merge-f
      (partial merge-with +)
    :print-f
