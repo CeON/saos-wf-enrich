@@ -25,7 +25,7 @@
          _ (println url)
          response
            (try
-             (hc/get url {:insecure? true})
+             (hc/get url {:insecure? true :accept :json})
            (catch Exception e
              { :error
                 (str "Exception: " (.getMessage e))}))
