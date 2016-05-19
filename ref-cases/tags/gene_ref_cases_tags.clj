@@ -32,7 +32,9 @@
          this-case-numbers
            (into
              #{}
-             (map :caseNumber (:courtCases j)))
+             (map
+                #(cljc/normalize-case-number (:caseNumber %))
+                (:courtCases j)))
 
          text
            (if (= court-type "COMMON")

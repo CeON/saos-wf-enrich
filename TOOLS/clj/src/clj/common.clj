@@ -1,5 +1,6 @@
 (ns clj.common
   (require
+    [clojure.string :as str]
     [clojure.java.io :as io]
     [clojurewerkz.propertied.properties :as p]
     [cheshire.core :as cc]
@@ -26,3 +27,8 @@
 (defn println-err [ & args ]
   (dorun
     (map #(.println *err* %) args)))
+
+(defn normalize-case-number [ case-number ]
+  (-> case-number
+      (str/replace #"\s+" " ")
+      (str/replace #"\." "")))

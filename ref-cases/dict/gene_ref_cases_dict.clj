@@ -1,12 +1,15 @@
 (require
    '[cheshire.core :as cc]
-   '[squeezer.core :as sc])
+   '[squeezer.core :as sc]
+   '[clj.common :as cljc])
 
 (defn conv-judgment-to-kv-pair [j]
   (let [
          case-numbers
-           (map :caseNumber (:courtCases j))
-              ]
+           (map
+              #(cljc/normalize-case-number (:caseNumber %))
+                (:courtCases j))
+       ]
     (map
       hash-map
       case-numbers
