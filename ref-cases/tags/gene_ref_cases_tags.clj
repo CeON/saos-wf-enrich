@@ -48,7 +48,9 @@
 
          dirty-referenced-case-numbers
            (try
-             (jl/extract-judgment-links text)
+             (into #{}
+               (map cljc/normalize-case-number
+                 (jl/extract-judgment-links text)))
              (catch Exception e
                (cljc/println-err
                  (format "ERROR, extracting singnatres for id=%d failed" id))
