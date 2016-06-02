@@ -31,4 +31,5 @@
 (defn normalize-case-number [ case-number ]
   (-> case-number
       (str/replace #"\s+" " ")
-      (str/replace #"\." "")))
+      (str/replace #"\." "")
+      str/trim))
